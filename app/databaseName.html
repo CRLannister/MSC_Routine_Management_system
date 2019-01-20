@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>New Routine</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+</head>
+<body>
+  <div class="container">
+    <form>
+      <div>
+        <label>Enter Database Name</label>
+        <input type="text" id="item" autofocus>
+      </div>
+      <button class="waves-effect waves-light btn" type="reset">Cancel</button>
+      <button class="waves-effect waves-light btn" type="submit">Add Database</button>
+    </form>
+  </div>
+
+  <script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+
+    document.querySelector('form').addEventListener('submit', submitForm);
+
+    function submitForm(e){
+      e.preventDefault();
+      const item = document.querySelector('#item').value;
+	    console.log(item);
+      console.log(ipcRenderer);
+      ipcRenderer.send('Database:add', item);
+    }
+  </script>
+</body>
+</html>
