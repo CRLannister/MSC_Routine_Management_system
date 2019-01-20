@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Delete Teacher</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+</head>
+<body>
+  <div class="container">
+    <form>
+      <div>
+        <label>Enter Teacher Name</label>
+        <input type="text" id="item" autofocus>
+	<label>Enter Initials</label>
+	<input type="text" id="teacherInitials" autofocus>
+
+      </div>
+      <button class="waves-effect waves-light btn" type="reset">Cancel</button>
+      <button class="waves-effect waves-light btn" type="submit">Add Teacher</button>
+    </form>
+  </div>
+
+  <script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+
+    document.querySelector('form').addEventListener('submit', submitForm);
+
+    function submitForm(e){
+      e.preventDefault();
+      const teacher_name = document.querySelector('#item').value;
+      const teacher_initials = document.querySelector('#teacherInitials').value;
+      console.log(ipcRenderer);
+      ipcRenderer.send('Teacher:add', teacher_name,teacher_initials);
+    }
+  </script>
+</body>
+</html>

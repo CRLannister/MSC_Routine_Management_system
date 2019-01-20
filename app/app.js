@@ -6,8 +6,11 @@ const ipc_r=require('electron').ipcRenderer;
 //set Env
 process.env.NODE_ENV = 'development';
 const {app, BrowserWindow, Menu, ipcMain} = electron;
+var fs = require('fs');
+const {shell} = require('electron') // deconstructing assignment
 
 
+var db='';
 let mainWindow;
 let addWindow;
 
@@ -83,6 +86,14 @@ ipcMain.on('Teacher:add', function(e, teacher_name, teacher_initials){
 });
 
 
+ipcMain.on('Subject:add', function(e, Subject_name){
+  mainWindow.webContents.send('Subject:Store',Subject_name);
+  addWindow.close();
+  // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+  //addWindow = null;
+});
+
+
 ipcMain.on('Database:add', function(e, item){
   console.log(item);
   mainWindow.webContents.send('DataBase:Create', item);
@@ -99,6 +110,28 @@ const mainMenuTemplate =  [
   {
     label: 'File',
     submenu:[
+      {
+        label:'Update Old Routine',
+        accelerator:process.platform == 'darwin' ? 'Command+o' : 'Ctrl+o',
+        click(){
+          ipcMain.on('dir:open', function(e, db){
+            console.log(db);
+            mainWindow.webContents.send('dir:open', db);
+            addWindow.close();
+            // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+            //addWindow = null;
+          });
+
+          //shell.openItem('./databases')
+          // fs.readFile(p, 'utf8', function (err, data) {
+          // if (err) return console.log(err);
+          // data is the contents of the text file we just read
+
+          
+        }
+      },
+
+      
       {
 	      label:'Create New Routine',
 	      accelerator:process.platform == 'darwin' ? 'Command+N' : 'Ctrl+N',
