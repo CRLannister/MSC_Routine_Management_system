@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MSC_Routine_Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+</head>
+<body>
+  <!--nav-->
+    <!--div  class="nav-wrapper"-->
+            <!--a class="brand-logo center"-->
+                    <h5 align='center' 'style:color=black'>TRIBHUVAN UNIVERSITY</h5>
+                    <h5 align='center'>INSTITUTE OF ENGINEERING, PULCHOWK</h5>
+                    <h6 align='center'>Department of Electronics and Computer Engineering</h6>
+                    <h6 align='center'><b>M.Sc. Computer Systems and Knowledge Engineering</b></h6>
+                    <h6 align='center' ><b id='dbName'>Database_enabled: </b></h6>
+
+            <!--/a-->
+
+    <!--/div-->
+  <!--/nav-->
+  <input type="file" id="dirOpen" webkitdirectory />
+  <ul></ul>
+
+    <ul id="database">
+    </ul>
+    <script>
+  	  const electron = require('electron');
+      const {ipcRenderer} = electron;
+      
+      ipcRenderer.on('dir:open', (event, arg) => {
+        document.getElementById('dirOpen').click(function(){
+
+        })
+      });
+
+      
+      var sqlite3 = require('sqlite3').verbose();
+      var db='';
+
+      ipcRenderer.on('DataBase:Create', (event, arg) => {
+        var fs = require('fs');
+        fs.c('../databases');
+        db= new sqlite3.Database(arg);
+        var init=document.getElementById('dbName').innerHTML ;
+        console.log(init);
+        document.getElementById('dbName').innerHTML= init+arg;
+        db.serialize(function () {
+          //db.run("CREATE TABLE Teacher (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT,`Initials`	TEXT)");
+          db.run("CREATE TABLE Teacher(`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL,`Initials`	TEXT NOT NULL UNIQUE)");
+          db.run("CREATE TABLE Subject (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL UNIQUE)");
+        
+        })
+      });
+
+      ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
+        db.serialize(function () {
+          db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+        })
+
+        });
+
+        ipcRenderer.on('Subject:Store',(event,Subject_name) => {
+        db.serialize(function () {
+          db.run("INSERT INTO Subject (`Name`) VALUES ( '"+Subject_name+"')");
+        })
+
+        });
+        
+        //db.serialize(function () {
+        //db.run("CREATE TABLE lorem (info TEXT)");
+
+        /*var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+        for (var i = 0; i < 10; i++) {
+          stmt.run("Ipsum " + i);
+        }
+
+        stmt.finalize();
+
+        var rows = document.getElementById("database");
+        db.each("SELECT rowid AS id, info FROM lorem", function (err, row) {
+          var item = document.createElement("li");
+          item.textContent = "" + row.id + ": " + row.info;
+          rows.appendChild(item);
+        });
+      });
+
+      db.close();
+      });
+      /*  var value =''
+	    ipcRenderer.on('Database:add', (e,res) => {
+		    value +=res;
+	    });
+	    console.log(value);
+      */
+
+      
+
+      
+    </script>
+
+</body>
+
+</html>
