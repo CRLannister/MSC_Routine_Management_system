@@ -38,8 +38,8 @@
       var db='';
 
       ipcRenderer.on('DataBase:Create', (event, arg) => {
-        var fs = require('fs');
-        fs.c('../databases');
+        //var fs = require('fs');
+        //fs.c('../databases');
         db= new sqlite3.Database(arg);
         var init=document.getElementById('dbName').innerHTML ;
         console.log(init);
