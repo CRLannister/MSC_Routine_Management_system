@@ -25,8 +25,9 @@
     function submitForm(e){
       e.preventDefault();
       const item = document.querySelector('#item').value;
-	    console.log(item);
-      console.log(ipcRenderer);
+	    //console.log(item);
+      //console.log(ipcRenderer);
+      
       ipcRenderer.send('Database:add', item);
     }
   </script>

@@ -36,14 +36,12 @@
       
       var sqlite3 = require('sqlite3').verbose();
       var db='';
-
-      ipcRenderer.on('DataBase:Create', (event, arg) => {
-        //var fs = require('fs');
-        //fs.c('../databases');
-        db= new sqlite3.Database(arg);
-        var init=document.getElementById('dbName').innerHTML ;
-        console.log(init);
-        document.getElementById('dbName').innerHTML= init+arg;
+      ipcRenderer.on('DataBase:Create', (event, db_name ,db_dir_prefix) => {
+        var file_full_path = db_dir_prefix+ '/databases/'+db_name;
+        db= new sqlite3.Database(file_full_path);
+        var dbPrompt=document.getElementById('dbName').innerHTML ;
+        document.getElementById('dbName').innerHTML= dbPrompt+db_name;
+        document.getElementById('dbName').innerHTML= db_name;
         db.serialize(function () {
           //db.run("CREATE TABLE Teacher (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT,`Initials`	TEXT)");
           db.run("CREATE TABLE Teacher(`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL,`Initials`	TEXT NOT NULL UNIQUE)");

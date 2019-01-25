@@ -19,6 +19,7 @@ app.on('window-all-closed', function() {
     app.quit();
 });
 
+
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
 app.on('ready', function() {
@@ -94,9 +95,9 @@ ipcMain.on('Subject:add', function(e, Subject_name){
 });
 
 
-ipcMain.on('Database:add', function(e, item){
-  console.log(item);
-  mainWindow.webContents.send('DataBase:Create', item);
+ipcMain.on('Database:add', function(e, db_name){
+  const dir_prefix_name = app.getAppPath();
+  mainWindow.webContents.send('DataBase:Create', db_name, dir_prefix_name);
   addWindow.close();
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
   //addWindow = null;
@@ -115,7 +116,7 @@ const mainMenuTemplate =  [
         accelerator:process.platform == 'darwin' ? 'Command+o' : 'Ctrl+o',
         click(){
           ipcMain.on('dir:open', function(e, db){
-            console.log(db);
+            //console.log(db);
             mainWindow.webContents.send('dir:open', db);
             addWindow.close();
             // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
