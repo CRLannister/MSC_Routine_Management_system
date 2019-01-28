@@ -1,0 +1,54 @@
+.routinn{
+    font-size: 8px;
+    text-align: center;
+    
+    }
+    .batch{
+    margin-top: 16px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    
+    }
+    .level_masters{
+    float: left;
+    margin-right: 18px;
+    
+    }
+    .program{
+        float: left;
+        margin-right: 18px;
+    }
+    .mains{
+        margin-top: 20px;
+    margin-left: 20px;
+    
+    
+    }
+    .year{
+    
+        float: left;
+        margin-right: 18px;
+    }
+    .part{
+        float: left;
+        margin-right: 18px;
+    }
+    .time{
+    
+        margin-right: 28px;
+        float: left;
+    }
+    ._periods{
+    float: left;
+    
+    
+    }
+    ._interval{
+        float: left;
+        margin-right: 28px;
+    }
+    .second_info{
+        margin-top: 10px;
+        margin-left: 20px;
+
+    }
