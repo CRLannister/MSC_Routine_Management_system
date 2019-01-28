@@ -2,22 +2,102 @@
 <html>
 <head>
   <title>MSC_Routine_Generator</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
   <!--nav-->
     <!--div  class="nav-wrapper"-->
             <!--a class="brand-logo center"-->
-                    <h5 align='center' 'style:color=black'>TRIBHUVAN UNIVERSITY</h5>
+<!--                     <h5 align='center' 'style:color=black'>TRIBHUVAN UNIVERSITY</h5>
                     <h5 align='center'>INSTITUTE OF ENGINEERING, PULCHOWK</h5>
                     <h6 align='center'>Department of Electronics and Computer Engineering</h6>
                     <h6 align='center'><b>M.Sc. Computer Systems and Knowledge Engineering</b></h6>
-                    <h6 align='center' ><b id='dbName'>Database_enabled: </b></h6>
+                    <h6 align='center' ><b id='dbName'>Database_enabled: </b></h6> -->
 
             <!--/a-->
 
     <!--/div-->
   <!--/nav-->
+<div>
+    <div align="center">
+       TRIBHUVAN UNIVERSITY<br>INSTITUTE OF ENGINEERING , PULCHOWK CAMPUS<br>Department of Computer and Electronics Engineering<br>
+       <b>M.sc. Program</b>
+    </div>
+<div align="center" class="batch">Class Routine of
+    <select id="select_batch">
+            <option>2075</option>
+            <option>2074</option>
+            <option>2073</option>
+            <option>2072</option>
+            <option>2071</option>
+            <option>2070</option>
+    </select>
+    batch
+</div>
+
+<div class="mains">
+    <b>
+    <div class="level_masters" align="center">Level : Masters</div>
+    <div class="program">Program
+        <select id="select_program">
+            <option></option>
+            <option>1</option>
+            <option>2</option>
+
+        </select>
+    </div>
+    <div class="year">Year
+        <select id="select_year">
+            <option></option>
+            <option>1</option>
+            <option>2</option>
+
+        </select>
+
+    </div>
+    <div class="part">Part
+        <select id="select_part">
+            <option></option>
+            <option>1</option>
+            <option>2</option>
+
+        </select>
+    </div>
+    <div class="effective_date">Effective from
+        <input type="date" id="select_date">
+
+    </div>
+
+    </b>
+    </div>
+    <div class="second_info">
+        <b>
+
+    <div class="time">Time
+        <input type="time" id="select_time">
+    </div>
+    <div class="_interval">Interval of each period
+        <select id="select_interval">
+            <option>30</option>
+            <option>45</option>
+            <option>50</option>
+        </select>
+        mins
+    </div>
+    <div class="_periods">No.of periods
+        <select id="select_periods">
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div>
+    </b>
+    </div>
+    </div>
+	
+	
+	
+	
+	
   <input type="file" id="dirOpen" webkitdirectory />
   <ul></ul>
 
@@ -26,6 +106,14 @@
     <script>
   	  const electron = require('electron');
       const {ipcRenderer} = electron;
+	var batch = document.getElementById("select_batch").value;
+      var program=document.getElementById("select_program").value;
+      var year=document.getElementById("select_year").value;
+      var part=document.getElementById("select_part").value;
+      var interval=document.getElementById("select_interval").value;
+      var periods=document.getElementById("select_periods").value;
+      var time=document.getElementById("select_time").value;
+      var date=document.getElementById("select_date").value;
       
       ipcRenderer.on('dir:open', (event, arg) => {
         document.getElementById('dirOpen').click(function(){
