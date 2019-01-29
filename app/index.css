@@ -52,3 +52,20 @@
         margin-left: 20px;
 
     }
+    
+    .tabb{
+        /* border: none !important; */
+        border-collapse:collapse;
+     border: 0;
+    }
+    .top_table{
+        border-collapse:collapse;
+    }
+   #select_teacher{
+
+    background: transparent;
+   }
+   .select_subject{
+       background: transparent;
+       margin: 0px;
+   }
