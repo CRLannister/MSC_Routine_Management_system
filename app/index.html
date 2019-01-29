@@ -114,6 +114,121 @@
       var periods=document.getElementById("select_periods").value;
       var time=document.getElementById("select_time").value;
       var date=document.getElementById("select_date").value;
+	  var isfirst=0;
+    var first=0;
+    var frst=0;
+    var arr=["sub1","sub2","sub3","sub4","sub5","sub6"];
+        var days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"];
+        var day_time=["Day/Time","10:15-11:00","11:00-11:45","11:45-1:00","1:00-1:45"];
+        document.write('<table border=1 class="top_table">');
+        
+        document.write('<tr>');
+        for(var k=0;k<5;k++){
+           if (isfirst==0){
+            document.write('<th> '+"Day/time"+'</th>');
+            isfirst=1;  
+           }
+           else{
+            document.write('<th> </th>');
+           }
+                   
+        }
+
+        document.write('</tr>');
+        
+        
+       
+        for(var i=0;i<days.length;i++){
+           // document.write('<tr><td>'+days[i]+'</td></tr>');
+           document.write('<tr>');
+           for(var j=0;j<3;j++){
+               if(first==0){
+               document.write('<td>'+days[i]+'</td>');
+               first=1;
+               }
+               else{
+                document.write('<td colspan=2 width="50%">'); 
+                   
+                       
+                            document.write('<table border=1 width="320" class="tabb">');
+                                 for(var l=0;l<2;l++){
+                                     if (frst==0){
+                        document.write('<tr>');
+                        document.write('<td>');
+                            document.write('<select style="width: 100%" class="select_subject"  >');
+                                document.write('<option>'+""+'</option>'); 
+                                document.write('<option>'+"sub1"+'</option>');
+                                document.write('<option>'+"sub2"+'</option>');
+                                document.write('<option>'+"sub3"+'</option>');
+                                document.write('<option>'+"sub4"+'</option>');
+                                document.write('<option>'+"sub5"+'</option>');
+                                document.write('<option>'+"sub6"+'</option>');
+                                document.write('<option>'+"sub7"+'</option>');
+                                document.write('<option>'+"sub8"+'</option>');
+                            
+                           
+        
+
+                            
+                            document.write('</select>');
+                            document.write('</td>');
+                             document.write('</tr>');
+                                frst=1;
+                                     }
+                                     else{
+                                        document.write('<tr>');
+                        document.write('<td width="50%">');
+                            document.write('<select style="width: 100%" id="select_teacher">');
+                                document.write('<option>'+""+'</option>');  
+                               document.write('<option>'+"teacher1"+'</option>');
+                               document.write('<option>'+"teacher2"+'</option>');
+                               document.write('<option>'+"teacher3"+'</option>');
+                               document.write('<option>'+"teacher4"+'</option>');
+                               document.write('<option>'+"teacher5"+'</option>');
+                               document.write('<option>'+"teacher6"+'</option>');
+                               document.write('<option>'+"teacher7"+'</option>');
+                               document.write('<option>'+"teacher8"+'</option>');
+                           
+                          
+       
+
+                           
+                           document.write('</select>');
+                      document.write('</td>')
+                        document.write('</tr>');
+                        frst=0;
+
+                                     }
+                                     
+                    }
+
+                            document.write('</table>');
+                document.write('</td>');
+               }
+               
+           }
+           first=0;
+    document.write('</tr>');
+           
+        }
+        
+        document.write('</table>');
+      
+    
+//         var select=document.getElementById("select_subject");
+
+        
+//         for(var i=0;i<arr.length;i++){
+//             var option=document.createElement("OPTION"),
+//             txt=document.createTextNode(arr[i]);
+//             option.appendChild(txt);
+//             option.setAttribute("value",arr[i]);
+//             select.insertBefore(option,select.lastChild);
+
+
+        
+// }
+
       
       ipcRenderer.on('dir:open', (event, arg) => {
         document.getElementById('dirOpen').click(function(){
