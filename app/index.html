@@ -8,7 +8,7 @@
   <!--nav-->
     <!--div  class="nav-wrapper"-->
             <!--a class="brand-logo center"-->
-<!--                     <h5 align='center' 'style:color=black'>TRIBHUVAN UNIVERSITY</h5>
+                    <!-- <h5 align='center' 'style:color=black'>TRIBHUVAN UNIVERSITY</h5>
                     <h5 align='center'>INSTITUTE OF ENGINEERING, PULCHOWK</h5>
                     <h6 align='center'>Department of Electronics and Computer Engineering</h6>
                     <h6 align='center'><b>M.Sc. Computer Systems and Knowledge Engineering</b></h6>
@@ -18,7 +18,7 @@
 
     <!--/div-->
   <!--/nav-->
-<div>
+  <div>
     <div align="center">
        TRIBHUVAN UNIVERSITY<br>INSTITUTE OF ENGINEERING , PULCHOWK CAMPUS<br>Department of Computer and Electronics Engineering<br>
        <b>M.sc. Program</b>
@@ -74,15 +74,27 @@
         <b>
 
     <div class="time">Time
-        <input type="time" id="select_time">
-    </div>
-    <div class="_interval">Interval of each period
-        <select id="select_interval">
-            <option>30</option>
-            <option>45</option>
-            <option>50</option>
+        <!-- <input type="time" id="select_time"> -->
+        <input type="number" id="select_firsttime" min="1" max="12" value=00>
+        :
+        <input type="number" id="select_secondtime" min="0" max="59" value=0>
+        <select id="select_timeperiod">
+            <option>AM</option>
+            <option>PM</option>
         </select>
+      
+    </div>
+  
+    <div class="_interval">Interval of each period
+        <!-- <select id="select_interval" onchange="func1()">
+            <option >30</option>
+            <option >45</option>
+            <option value=50>50</option>
+        </select> -->
+        <input type="number" id="select_interval" 
+       min="10" max="60" value=45>
         mins
+        <button class="btn_settime" onclick="myFunction_settime()">Set Time</button>
     </div>
     <div class="_periods">No.of periods
         <select id="select_periods">
@@ -93,11 +105,9 @@
     </b>
     </div>
     </div>
-	
-	
-	
-	
-	
+
+
+
   <input type="file" id="dirOpen" webkitdirectory />
   <ul></ul>
 
@@ -106,21 +116,28 @@
     <script>
   	  const electron = require('electron');
       const {ipcRenderer} = electron;
-	var batch = document.getElementById("select_batch").value;
+      
+      var batch = document.getElementById("select_batch").value;
       var program=document.getElementById("select_program").value;
       var year=document.getElementById("select_year").value;
       var part=document.getElementById("select_part").value;
-      var interval=document.getElementById("select_interval").value;
-      var periods=document.getElementById("select_periods").value;
-      var time=document.getElementById("select_time").value;
+  
+      var e=document.getElementById("select_periods");
+     
       var date=document.getElementById("select_date").value;
-	  var isfirst=0;
+    var isfirst=0;
     var first=0;
     var frst=0;
+    var storez;
     var arr=["sub1","sub2","sub3","sub4","sub5","sub6"];
         var days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"];
+        var demoo=["demo0","demo1","demo2","demo3","demo4"];
+//         e.onchange = function() {
+//     var strUser = e.options[e.selectedIndex].value;
+    
+// }
         document.write('<table border=1 class="top_table">');
-        
+      
         document.write('<tr>');
         for(var k=0;k<5;k++){
            if (isfirst==0){
@@ -128,7 +145,31 @@
             isfirst=1;  
            }
            else{
-            document.write('<th> </th>');
+             
+            document.write('<th width="25%">');
+                
+                if(k==1){
+            document.write('<p id="demo1"></p>');
+           
+                }
+                else if(k==2){
+                    document.write('<p id="demo2"></p>');
+
+                }
+                else if(k==3){
+                    document.write('<p id="demo3"></p>');
+
+                }
+                else if(k==4){
+                    document.write('<p id="demo4"></p>');
+
+                }
+           
+            
+
+           
+            document.write('</th>');
+          
            }
                    
         }
@@ -154,8 +195,8 @@
                                      if (frst==0){
                         document.write('<tr>');
                         document.write('<td>');
-                            document.write('<select style="width: 110%" class="select_subject"  >');
-                                document.write('<option>'+""+'</option>'); 
+                            document.write('<select style="width: 106%" class="select_subject"  >');
+                                document.write('<option></option>'); 
                                 document.write('<option>'+"sub1"+'</option>');
                                 document.write('<option>'+"sub2"+'</option>');
                                 document.write('<option>'+"sub3"+'</option>');
@@ -177,7 +218,7 @@
                                      else{
                                         document.write('<tr>');
                         document.write('<td width="50%">');
-                            document.write('<select style="width: 110%" id="select_teacher">');
+                            document.write('<select style="width: 106%" id="select_teacher">');
                                 document.write('<option>'+""+'</option>');  
                                document.write('<option>'+"teacher1"+'</option>');
                                document.write('<option>'+"teacher2"+'</option>');
@@ -212,23 +253,55 @@
         }
         
         document.write('</table>');
-      
-    
-//         var select=document.getElementById("select_subject");
+       
+        function myFunction_settime(){
+            var first_time=document.getElementById("select_firsttime").value;
+              var second_time=document.getElementById("select_secondtime").value;
+              var interval=document.getElementById("select_interval").value;
+              var time_period=document.getElementById("select_timeperiod").value;
+              if(interval==NaN){
+                  interval=0;
+              }
+             
+              if(second_time<10){
+                  second_time="0"+second_time;
+              }
+             
+             for(var i=1;i<=4;i++){
+                
+            
+              var new_time=parseInt(second_time)+parseInt(interval);
+              if(new_time>59){
+                  var subb=new_time-60;
+                  
+                  
+                  
+                  if(first_time<12){
+                      storez=first_time;
+                      first_time++;
 
-        
-//         for(var i=0;i<arr.length;i++){
-//             var option=document.createElement("OPTION"),
-//             txt=document.createTextNode(arr[i]);
-//             option.appendChild(txt);
-//             option.setAttribute("value",arr[i]);
-//             select.insertBefore(option,select.lastChild);
+                  }
+                  else{
+                    storez=first_time;
+                    first_time=1;
+                  }
+                  if(subb<10 && subb>=0){
+                    
+                    subb="0"+subb;
+                           
+                
+                }
+                document.getElementById("demo"+i).innerHTML = storez+":"+second_time+"-"+first_time+":"+subb+" "+time_period;
+                second_time=subb;
+            }
+            else{
+                document.getElementById("demo"+i).innerHTML = first_time+":"+second_time+"-"+first_time+":"+new_time+" "+time_period;
+                second_time=new_time;
 
+            }
+             }
+            }
 
-        
-// }
-
-      
       ipcRenderer.on('dir:open', (event, arg) => {
         document.getElementById('dirOpen').click(function(){
 
