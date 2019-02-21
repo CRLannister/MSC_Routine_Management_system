@@ -1,23 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>MSC ROUTINE GENERATOR</title>
-         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<head>
+    <title>MSC ROUTINE GENERATOR</title>
+    
+    <style>
+        button {
+            margin-top: 4%;
+            margin-left: 25%;
+            padding: 14px 40px;
+            width: 50%;
+            border-radius: 8px;
+            background-color: #42a5f5;
+        }
+        button:hover {
+            background-color:#1e88e5;
+        }
 
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> 
-    </head>
+    </style>
 
-    <body>
-        <button type="button" class="btn-info">New Routine</button>
-        <button type="button" class="btn-info">Old Routines</button>
-        <button type="button" class="btn-info">Add teacher</button>
-        <button type="button" class="btn-info">Delete Teacher</button>
-        <button type="button" class="btn-info">Add Course</button>
-        <button type="button" class="btn-info">Delete Course</button>
-    </body>
+
+</head>
+
+<body>
+    <button type="button" id="newRoutine">New Routine</button></br>
+    <button type="button" id="oldRoutine">Old Routines</button></br>
+    <button type="button" id="addTeacher">Add teacher</button></br>
+    <button type="button" id="delTeacher">Delete Teacher</button></br>
+    <button type="button" id="addCourse">Add Course</button></br>
+    <button type="button" id="delCourse">Delete Course</button></br>
+
+    <!--scripts for each buttons.-->
+    <script>
+            const electron = require('electron');
+            const {ipcRenderer} = electron;
+
+
+            document.getElementById('newRoutine').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'newRoutine');
+                console.log('from menu 1');
+            }
+            document.getElementById('oldRoutine').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'oldRoutine');
+                console.log("from menu2");
+            }
+            document.getElementById('addTeacher').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'addTeacher');
+                console.log("from menu3");
+            }
+            document.getElementById('delTeacher').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'delTeacher');
+                console.log("from menu4");
+            }
+            document.getElementById('addCourse').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'addCourse');
+                console.log("from menu5");
+            }
+            document.getElementById('delCourse').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'delCourse');
+                console.log("from menu6");
+            }
+
+            
+        </script>
+
+  
+</body>
+
 </html>

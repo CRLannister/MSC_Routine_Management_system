@@ -28,7 +28,7 @@ app.on('ready', function() {
   // and load the index.html of the app.
   //mainWindow.loadURL('file://' + __dirname + '/index.html');
      mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: path.join(__dirname, 'menu.html'),
     protocol: 'file:',
     slashes:true
   }));
@@ -101,6 +101,31 @@ ipcMain.on('Database:add', function(e, item){
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
   //addWindow = null;
 });
+
+
+//EDIT FROM PRASHANT
+//Below are the functions to listen to button clicks in Main Menu.
+//Each button click sends a message "button clicked" and the Id of the button clicked.
+//some clicks might not have functionality.
+
+ipcMain.on('buttonClicked', function(e, buttonId){
+  if(buttonId==="newRoutine"){
+    createWindow("New Routine","databaseName.html");
+  }
+  
+  else if(buttonId=="oldRoutine"){
+    console.log("update old routine");
+  }
+  
+  else if(buttonId == "addTeacher"){
+    createWindow("Add Teacher","addTeacher.html");
+  }
+
+  else if(buttonId=="addCourse"){
+    createWindow("Add Course","addSubject.html");
+  }
+});
+
 
 
 
@@ -195,6 +220,7 @@ const mainMenuTemplate =  [
     label: 'About',
   }
 ];
+
 
 // If OSX, add empty object to menu
 if(process.platform == 'darwin'){
