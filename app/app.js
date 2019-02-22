@@ -17,7 +17,7 @@ const dir_prefix_name = app.getAppPath();
 
 
 app.on('window-all-closed', function() {
-    app.quit();
+  app.quit();
 });
 
 // This method will be called when Electron has done everything
@@ -29,7 +29,7 @@ app.on('ready', function() {
   // and load the index.html of the app.
   //mainWindow.loadURL('file://' + __dirname + '/index.html');
     mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: path.join(__dirname, 'menu.html'),
     protocol: 'file:',
     slashes:true
   }));
@@ -96,12 +96,39 @@ ipcMain.on('Subject:add', function(e, Subject_name){
 
 
 ipcMain.on('Database:add', function(e, db_name){
-  console.log(item);
+  console.log(db_name);
   mainWindow.webContents.send('DataBase:Create', db_name, dir_prefix_name);
   addWindow.close();
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
   //addWindow = null;
 });
+
+
+//EDIT FROM PRASHANT
+//Below are the functions to listen to button clicks in Main Menu.
+//Each button click sends a message "button clicked" and the Id of the button clicked.
+//some clicks might not have functionality.
+
+ipcMain.on('buttonClicked', function(e, buttonId){
+  if(buttonId==="newRoutine"){
+    createWindow("New Routine","databaseName.html");
+  }
+  
+  else if(buttonId=="oldRoutine"){
+    console.log("update old routine");
+  }
+  
+  else if(buttonId == "addTeacher"){
+    createWindow("Add Teacher","addTeacher.html");
+  }
+
+  else if(buttonId=="addCourse"){
+    createWindow("Add Course","addSubject.html");
+  }
+
+
+});
+
 
 
 
@@ -119,27 +146,12 @@ const mainMenuTemplate =  [
           const { dialog } = require('electron');
           var db_dir = dir_prefix_name + '/databases/';
           old_db = dialog.showOpenDialog([BrowserWindow],{focus : [true]} ,{defaultPath : [db_dir]} ,{filters: [{name: 'databases', extensions: ['sqlite3'] }]} ,{ properties: ['openFile'] });
-          // var bfr = fs.appendFileSync(String(old_db));
           mainWindow.webContents.send('open:Db', String(old_db));
-          // mainWindow.webContents.send('open:Db', old_db, bfr);
-         // ipcMain.on('dir:open', function(e, db){
-            //console.log(db);
-           // mainWindow.webContents.send('dir:open', db);
-            //addWindow.close();
-            // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
-            //addWindow = null;
-         // });
-
-          //shell.openItem('./databases')
-          // fs.readFile(p, 'utf8', function (err, data) {
-          // if (err) return console.log(err);
-          // data is the contents of the text file we just read
-
-          
+          // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+ 
         }
       },
 
-      
       {
 	      label:'Create New Routine',
 	      accelerator:process.platform == 'darwin' ? 'Command+N' : 'Ctrl+N',
@@ -234,6 +246,3 @@ if(process.env.NODE_ENV !== 'production'){
     ]
   });
 }
-
-
-
