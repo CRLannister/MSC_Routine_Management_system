@@ -28,7 +28,7 @@ app.on('ready', function() {
   // and load the index.html of the app.
   //mainWindow.loadURL('file://' + __dirname + '/index.html');
      mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: path.join(__dirname, 'menu.html'),
     protocol: 'file:',
     slashes:true
   }));
@@ -42,19 +42,20 @@ app.on('ready', function() {
 	  app.quit();
   });
 
+  /*
   // Build menu from template
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   // Insert menu
   Menu.setApplicationMenu(mainMenu);
-
+  */
 });
 
 // Handle add item window
 function createWindow(TITLE,HTML_FILE){
   addWindow = new BrowserWindow({
     show:false,
-    width: 400,
-    height:300,
+    width: 800,
+    height:600,
     title:TITLE,
     //titleBarStyle: 'default',
     parent: mainWindow 
@@ -98,12 +99,45 @@ ipcMain.on('Database:add', function(e, item){
   console.log(item);
   mainWindow.webContents.send('DataBase:Create', item);
   addWindow.close();
+  createWindow("Students' Routine", "index.html");
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
   //addWindow = null;
 });
 
 
+//EDIT FROM PRASHANT
+//Below is the function to listen to button clicks in Main Menu.
+//Each button click sends a message "button clicked" and the Id of the button clicked.
+//some clicks might not have functionality.
 
+ipcMain.on('buttonClicked', function(e, buttonId){
+  if(buttonId==="newRoutine"){
+    createWindow("New Routine","databaseName.html");
+  }
+  
+  else if(buttonId=="oldRoutine"){
+    console.log("update old routine");
+  }
+  
+  else if(buttonId == "addTeacher"){
+    createWindow("Add Teacher","addTeacher.html");
+  }
+
+  else if(buttonId=="addCourse"){
+    createWindow("Add Course","addSubject.html");
+  }
+});
+
+//closing the window by "cancel" button.
+ipcMain.on('closeWindow', function(e){
+  addWindow.close();
+});
+
+
+//We won't really need custom menu bar after all those buttons in front page.
+//Only default menu will be available.
+
+/*
 // Create menu template
 const mainMenuTemplate =  [
   // Each object is a dropdown
@@ -196,6 +230,7 @@ const mainMenuTemplate =  [
   }
 ];
 
+
 // If OSX, add empty object to menu
 if(process.platform == 'darwin'){
   mainMenuTemplate.unshift({});
@@ -220,5 +255,4 @@ if(process.env.NODE_ENV !== 'production'){
   });
 }
 
-
-
+*/

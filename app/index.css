@@ -72,7 +72,7 @@
    input[type=number]{
     width: 32px;
 } 
-`   .btn_settime{
+   .btn_settime{
     background-color: green;
     color: aliceblue;
 }
