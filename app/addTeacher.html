@@ -14,7 +14,7 @@
 	<input type="text" id="teacherInitials" autofocus>
 
       </div>
-      <button class="waves-effect waves-light btn" type="reset">Cancel</button>
+      <button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button>
       <button class="waves-effect waves-light btn" type="submit">Add Teacher</button>
     </form>
   </div>
@@ -32,6 +32,12 @@
       console.log(ipcRenderer);
       ipcRenderer.send('Teacher:add', teacher_name,teacher_initials);
     }
+
+    //sending message to exit the window if cancel button is clicked.
+    document.getElementById("cancelButton").onclick = function(e){
+      ipcRenderer.send('closeWindow');
+    }
+
   </script>
 </body>
 </html>

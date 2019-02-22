@@ -42,19 +42,20 @@ app.on('ready', function() {
 	  app.quit();
   });
 
+  /*
   // Build menu from template
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   // Insert menu
   Menu.setApplicationMenu(mainMenu);
-
+  */
 });
 
 // Handle add item window
 function createWindow(TITLE,HTML_FILE){
   addWindow = new BrowserWindow({
     show:false,
-    width: 400,
-    height:300,
+    width: 800,
+    height:600,
     title:TITLE,
     //titleBarStyle: 'default',
     parent: mainWindow 
@@ -98,13 +99,14 @@ ipcMain.on('Database:add', function(e, item){
   console.log(item);
   mainWindow.webContents.send('DataBase:Create', item);
   addWindow.close();
+  createWindow("Students' Routine", "index.html");
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
   //addWindow = null;
 });
 
 
 //EDIT FROM PRASHANT
-//Below are the functions to listen to button clicks in Main Menu.
+//Below is the function to listen to button clicks in Main Menu.
 //Each button click sends a message "button clicked" and the Id of the button clicked.
 //some clicks might not have functionality.
 
@@ -126,9 +128,16 @@ ipcMain.on('buttonClicked', function(e, buttonId){
   }
 });
 
+//closing the window by "cancel" button.
+ipcMain.on('closeWindow', function(e){
+  addWindow.close();
+});
 
 
+//We won't really need custom menu bar after all those buttons in front page.
+//Only default menu will be available.
 
+/*
 // Create menu template
 const mainMenuTemplate =  [
   // Each object is a dropdown
@@ -246,5 +255,4 @@ if(process.env.NODE_ENV !== 'production'){
   });
 }
 
-
-
+*/
