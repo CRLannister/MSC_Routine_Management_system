@@ -12,7 +12,7 @@
                     <h5 align='center'>INSTITUTE OF ENGINEERING, PULCHOWK</h5>
                     <h6 align='center'>Department of Electronics and Computer Engineering</h6>
                     <h6 align='center'><b>M.Sc. Computer Systems and Knowledge Engineering</b></h6>
-                    <h6 align='center' ><b id='dbName'>Database_enabled: </b></h6>
+                    <h6 align='center' ><b id='dbName'>Database_enabled : </b><b id='dbVal'> </b> </h6>
 
             <!--/a-->
 
@@ -26,22 +26,35 @@
     <script>
   	  const electron = require('electron');
       const {ipcRenderer} = electron;
+
+      var sqlite3 = require('sqlite3').verbose();
+      var db;
+      var bfr;
+
+
+      function dbInitialize(file_val){
+        document.getElementById('dbVal').innerHTML = file_val ;
+
+      }
       
-      ipcRenderer.on('dir:open', (event, arg) => {
+      /*ipcRenderer.on('dir:open', (event, arg) => {
         document.getElementById('dirOpen').click(function(){
 
         })
       });
 
+      */
       
-      var sqlite3 = require('sqlite3').verbose();
-      var db='';
+      ipcRenderer.on('open:Db', (event, old_Dbname) => {
+        dbInitialize(old_Dbname);
+        db = new sqlite3.Database(old_Dbname);;
+      });
+
+
       ipcRenderer.on('DataBase:Create', (event, db_name ,db_dir_prefix) => {
-        var file_full_path = db_dir_prefix+ '/databases/'+db_name;
+        var file_full_path = db_dir_prefix+ '/databases/'+db_name + ".sqlite3";
         db= new sqlite3.Database(file_full_path);
-        var dbPrompt=document.getElementById('dbName').innerHTML ;
-        document.getElementById('dbName').innerHTML= dbPrompt+db_name;
-        document.getElementById('dbName').innerHTML= db_name;
+        dbInitialize(db_name);
         db.serialize(function () {
           //db.run("CREATE TABLE Teacher (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT,`Initials`	TEXT)");
           db.run("CREATE TABLE Teacher(`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL,`Initials`	TEXT NOT NULL UNIQUE)");
@@ -53,6 +66,11 @@
       ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
         db.serialize(function () {
           db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+          //db.run("SELECT COUNT(*) FROM (SELECT `_rowid_`,* FROM `Teacher` ORDER BY `_rowid_` ASC)");
+          //db.run("SELECT `_rowid_`,* FROM `Teacher` ORDER BY `_rowid_` ASC LIMIT 0, 50000");
+          db.each("SELECT * FROM Teacher", function (err, row) {
+            console.log(row);
+          });
         })
 
         });

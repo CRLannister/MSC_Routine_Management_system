@@ -13,12 +13,12 @@ const {shell} = require('electron') // deconstructing assignment
 var db='';
 let mainWindow;
 let addWindow;
+const dir_prefix_name = app.getAppPath();
 
 
 app.on('window-all-closed', function() {
     app.quit();
 });
-
 
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
@@ -28,7 +28,7 @@ app.on('ready', function() {
 
   // and load the index.html of the app.
   //mainWindow.loadURL('file://' + __dirname + '/index.html');
-     mainWindow.loadURL(url.format({
+    mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes:true
@@ -96,7 +96,7 @@ ipcMain.on('Subject:add', function(e, Subject_name){
 
 
 ipcMain.on('Database:add', function(e, db_name){
-  const dir_prefix_name = app.getAppPath();
+  console.log(item);
   mainWindow.webContents.send('DataBase:Create', db_name, dir_prefix_name);
   addWindow.close();
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
@@ -115,13 +115,20 @@ const mainMenuTemplate =  [
         label:'Update Old Routine',
         accelerator:process.platform == 'darwin' ? 'Command+o' : 'Ctrl+o',
         click(){
-          ipcMain.on('dir:open', function(e, db){
+
+          const { dialog } = require('electron');
+          var db_dir = dir_prefix_name + '/databases/';
+          old_db = dialog.showOpenDialog([BrowserWindow],{focus : [true]} ,{defaultPath : [db_dir]} ,{filters: [{name: 'databases', extensions: ['sqlite3'] }]} ,{ properties: ['openFile'] });
+          // var bfr = fs.appendFileSync(String(old_db));
+          mainWindow.webContents.send('open:Db', String(old_db));
+          // mainWindow.webContents.send('open:Db', old_db, bfr);
+         // ipcMain.on('dir:open', function(e, db){
             //console.log(db);
-            mainWindow.webContents.send('dir:open', db);
-            addWindow.close();
+           // mainWindow.webContents.send('dir:open', db);
+            //addWindow.close();
             // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
             //addWindow = null;
-          });
+         // });
 
           //shell.openItem('./databases')
           // fs.readFile(p, 'utf8', function (err, data) {
@@ -174,6 +181,13 @@ const mainMenuTemplate =  [
 		  	label:'Add Teacher',
 			  click(){
 				  createWindow("ADD TEACHER","addTeacher.html");
+			  }
+      },
+      
+      {
+		  	label:'Delete Teacher',
+			  click(){
+				  createWindow("DELETE TEACHER","deleteTeacher.html");
 			  }
 		  }
 	  ]
