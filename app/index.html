@@ -172,7 +172,7 @@
                             else{
                                 document.write('<tr>');
                                 document.write('<td width="50%">');
-                                document.write('<select style="width: 106%" id="select_teacher" class="select_teacher">');
+                                document.write('<select style="width: 106%" id="select_teacher">');
                                 document.write('<option>'+""+'</option>');  
                                 
                     
@@ -284,44 +284,33 @@
 
             //dropdown
 
-            db = new sqlite3.Database('./databases/testRoutine.sqlite3');
+            //db = new sqlite3.Database('./databases/testRoutine.sqlite3');
             let sqlCommandTeacher = `SELECT DISTINCT Name Name FROM Teacher`;
-            let teacherList = document.getElementsByClassName('select_teacher');
-            let teacherListArray = [].slice.call(teacherList);
-            // console.log('Teacher list arr: '+ teacherListArray);
-            // console.log('Teacher list: ' + teacherList);
-
-            
+            let teacherList = document.getElementById('select_teacher');
             db.all(sqlCommandTeacher, [], (err, rows) => {
                 if (err) {
                     throw err;
                 }
-                for (i = 0; i < teacherListArray.length; i++){
-                    rows.forEach((row) => {
-                        const option = document.createElement('option');
-                        const optionText = document.createTextNode(row.Name);
-                        option.appendChild(optionText);
-                        teacherListArray[i].appendChild(option);
-                    });
-                }
+                rows.forEach((row) => {
+                    const option = document.createElement('option');
+                    const optionText = document.createTextNode(row.Name);
+                    option.appendChild(optionText);
+                    teacherList.appendChild(option);
+                });
             });
 
             let sqlCommandSubject = `SELECT DISTINCT Name Name FROM Subject`;
-            let subjectList = document.getElementsByClassName('select_subject');
-            let subjectListArray = [].slice.call(subjectList);
-            // console.log('Sub list : ' + subjectList);
+            let subjectList = document.getElementById('select_subject');
             db.all(sqlCommandSubject, [], (err, rows) => {
                     if (err) {
                         throw err;
                     }
-                    for( i = 0; i <subjectListArray.length; i++){
-                        rows.forEach((row) => {
-                            const option = document.createElement('option');
-                            const optionText = document.createTextNode(row.Name);
-                            option.appendChild(optionText);
-                            subjectListArray[i].appendChild(option);
-                        });
-                    }
+                    rows.forEach((row) => {
+                        const option = document.createElement('option');
+                        const optionText = document.createTextNode(row.Name);
+                        option.appendChild(optionText);
+                        subjectList.appendChild(option);
+                    });
                 });
 
             //dropdown
