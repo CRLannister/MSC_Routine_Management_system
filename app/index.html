@@ -160,8 +160,8 @@
                         for(var l=0;l<2;l++){
                             if (frst==0){
                                 document.write('<tr>');
-                                document.write('<td>');
-                                document.write('<select style="width: 106%" class="select_subject" id="select_subject" >');
+                                    document.write('<td  class="subject_value_option" id="subject_value_option">');
+                                document.write('<select style="width: 106%" class="select_subject"  id="select_subject">');
                                 document.write('<option></option>'); 
                                 
                                 document.write('</select>');
@@ -171,8 +171,8 @@
                             }
                             else{
                                 document.write('<tr>');
-                                document.write('<td width="50%">');
-                                document.write('<select style="width: 106%" id="select_teacher">');
+                                document.write('<td width="50%" class="teacher_value_option" id="teacher_value_option">');
+                                document.write('<select style="width: 106%" class="select_teacher" id="select_teacher">');
                                 document.write('<option>'+""+'</option>');  
                                 
                     
@@ -234,45 +234,119 @@
                 }
             }
 
-            // ipcRenderer.on('dir:open', (event, arg) => {
-            //     document.getElementById('dirOpen').click(function(){
+            
+            // function dropDown (db){
+            //     let sqlCommandTeacher = `SELECT DISTINCT Name Name FROM Teacher`;
+            //     let teacherList = document.getElementsByClassName('select_teacher');
+            //     // console.log(teacherList.item);
+            //     // document.querySelectorAll('.select_teacher').forEach((item , index) => {
+            //     //     while (item.childNodes.length > 1) {
+            //     //         item.removeChild(item.lastChild);
+            //     //     }
+            //     // });
+            //     // Array.prototype.forEach.call(teacherList, function(el)  {
+            //     //     while (el.childNodes.length > 1) {
+            //     //         el.removeChild(el.lastChild);
+            //     //     }
+            //     // });
+                
+            //     db.all(sqlCommandTeacher, [], (err, rows) => {
+            //         if (err) {
+            //             throw err;
+            //         }
+            //         console.log(rows);
+            //         rows.forEach((row) => {
+            //             option = document.createElement('option');
+            //             optionText = document.createTextNode(row.Name);
+            //             console.log(optionText);
+            //             // option.appendChild(optionText);
+            //             // console.log(option);
+            //             document.querySelectorAll('.select_teacher').forEach((item , index) => {
+            //                 console.log(item);
+            //                 item.appendChild(option);
+            //                 option.appendChild(optionText);
+            //             });
+               
 
-            //     })
-            // });
+            //             // Array.prototype.forEach.call(teacherList, function(el)  {
+            //             //     el.appendChild(option);
+            //             // });
+            //             // teacherList.appendChild(option);
+            //         });
+            //     });
 
+            //     let sqlCommandSubject = `SELECT DISTINCT Name Name FROM Subject`;
+            //     let subjectList = document.getElementsByClassName('select_subject');
+            //     Array.prototype.forEach.call(subjectList, function(el)  {
+            //         while (el.childNodes.length > 1) {
+            //             el.removeChild(el.lastChild);
+            //         }
+            //     });
 
+            //     db.all(sqlCommandSubject, [], (err, rows) => {
+            //             if (err) {
+            //                 throw err;
+            //             }
+            //             rows.forEach((row) => {
+            //                 const option = document.createElement('option');
+            //                 const optionText = document.createTextNode(row.Name);
+            //                 option.appendChild(optionText);
+            //                 Array.prototype.forEach.call(subjectList, function(el)  {
+            //                     el.appendChild(option);
+            //                 });
+            //                 // subjectList.appendChild(option);
+            //             });
+            //         });
 
+            //     }
             function dropDown (db){
                 let sqlCommandTeacher = `SELECT DISTINCT Name Name FROM Teacher`;
-                let teacherList = document.getElementById('select_teacher');
+                let teacherList = document.getElementsByClassName('select_teacher');
+                let teacherListArray = [].slice.call(teacherList);
+                // console.log('Teacher list arr: '+ teacherListArray);
+                // console.log('Teacher list: ' + teacherList);
+                for (i = 0; i < teacherListArray.length; i++){
+                    while (teacherListArray[i].childNodes.length > 1) {
+                        teacherListArray[i].removeChild(teacherListArray[i].lastChild);
+                    }
+                }
+
                 db.all(sqlCommandTeacher, [], (err, rows) => {
                     if (err) {
                         throw err;
                     }
-                    rows.forEach((row) => {
-                        const option = document.createElement('option');
-                        const optionText = document.createTextNode(row.Name);
-                        option.appendChild(optionText);
-                        teacherList.appendChild(option);
-                    });
-                });
-
-                let sqlCommandSubject = `SELECT DISTINCT Name Name FROM Subject`;
-                let subjectList = document.getElementById('select_subject');
-                db.all(sqlCommandSubject, [], (err, rows) => {
-                        if (err) {
-                            throw err;
-                        }
+                    for (i = 0; i < teacherListArray.length; i++){
                         rows.forEach((row) => {
                             const option = document.createElement('option');
                             const optionText = document.createTextNode(row.Name);
                             option.appendChild(optionText);
-                            subjectList.appendChild(option);
+                            teacherListArray[i].appendChild(option);
                         });
-                    });
-
+                    }
+                });
+                let sqlCommandSubject = `SELECT DISTINCT Name Name FROM Subject`;
+                let subjectList = document.getElementsByClassName('select_subject');
+                let subjectListArray = [].slice.call(subjectList);
+                // console.log('Sub list : ' + subjectList);
+                db.all(sqlCommandSubject, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+                    for (i = 0; i < teacherListArray.length; i++){
+                        while (subjectListArray[i].childNodes.length > 1) {
+                            subjectListArray[i].removeChild(subjectListArray[i].lastChild);
+                        }
+                    }
+                    for( i = 0; i <subjectListArray.length; i++){
+                        rows.forEach((row) => {
+                            const option = document.createElement('option');
+                            const optionText = document.createTextNode(row.Name);
+                            option.appendChild(optionText);
+                            subjectListArray[i].appendChild(option);
+                        });
+                    }
+                });
             }
-
         
             var sqlite3 = require('sqlite3').verbose();
             var db;
@@ -307,13 +381,14 @@
                         console.log(row);
                     });
                 })
+                dropDown(db);
             });
 
             ipcRenderer.on('Subject:Store',(event,Subject_name) => {
                 db.serialize(function () {
                     db.run("INSERT INTO Subject (`Name`) VALUES ( '"+Subject_name+"')");
                 })
-
+                dropDown(db);
             });
 
             ipcRenderer.on('DataBase:append', (event, db_name ,db_dir_prefix) => {
