@@ -103,6 +103,14 @@ ipcMain.on('Database:add', function(e, db_name){
   //addWindow = null;
 });
 
+ipcMain.on('Database:old', function(e, db_name){
+  console.log(db_name);
+  mainWindow.webContents.send('DataBase:append', db_name, dir_prefix_name);
+  addWindow.close();
+  // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+  //addWindow = null;
+});
+
 
 //EDIT FROM PRASHANT
 //Below are the functions to listen to button clicks in Main Menu.
@@ -115,6 +123,7 @@ ipcMain.on('buttonClicked', function(e, buttonId){
   }
   
   else if(buttonId=="oldRoutine"){
+    createWindow("old Routine","oldDb.html");
     console.log("update old routine");
   }
   

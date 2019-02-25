@@ -45,6 +45,8 @@
                 console.log('from menu 1');
             }
             document.getElementById('oldRoutine').onclick = function(e){
+                const { remote } = require('electron')
+                remote.getCurrentWindow().loadURL('file://' + __dirname + '/index.html')
                 ipcRenderer.send('buttonClicked', 'oldRoutine');
                 console.log("from menu2");
             }

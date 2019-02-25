@@ -240,6 +240,39 @@
             //     })
             // });
 
+
+
+            function dropDown (db){
+                let sqlCommandTeacher = `SELECT DISTINCT Name Name FROM Teacher`;
+                let teacherList = document.getElementById('select_teacher');
+                db.all(sqlCommandTeacher, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+                    rows.forEach((row) => {
+                        const option = document.createElement('option');
+                        const optionText = document.createTextNode(row.Name);
+                        option.appendChild(optionText);
+                        teacherList.appendChild(option);
+                    });
+                });
+
+                let sqlCommandSubject = `SELECT DISTINCT Name Name FROM Subject`;
+                let subjectList = document.getElementById('select_subject');
+                db.all(sqlCommandSubject, [], (err, rows) => {
+                        if (err) {
+                            throw err;
+                        }
+                        rows.forEach((row) => {
+                            const option = document.createElement('option');
+                            const optionText = document.createTextNode(row.Name);
+                            option.appendChild(optionText);
+                            subjectList.appendChild(option);
+                        });
+                    });
+
+            }
+
         
             var sqlite3 = require('sqlite3').verbose();
             var db;
@@ -264,6 +297,7 @@
                     db.run("CREATE TABLE Subject (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL UNIQUE)");
                 
                 })
+                dropDown(db);
             });
 
             ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
@@ -282,36 +316,19 @@
 
             });
 
-            //dropdown
-
-            //db = new sqlite3.Database('./databases/testRoutine.sqlite3');
-            let sqlCommandTeacher = `SELECT DISTINCT Name Name FROM Teacher`;
-            let teacherList = document.getElementById('select_teacher');
-            db.all(sqlCommandTeacher, [], (err, rows) => {
-                if (err) {
-                    throw err;
-                }
-                rows.forEach((row) => {
-                    const option = document.createElement('option');
-                    const optionText = document.createTextNode(row.Name);
-                    option.appendChild(optionText);
-                    teacherList.appendChild(option);
-                });
+            ipcRenderer.on('DataBase:append', (event, db_name ,db_dir_prefix) => {
+                var file_full_path = db_dir_prefix+ '/databases/'+db_name + ".sqlite3";
+                console.log(file_full_path);
+                db= new sqlite3.Database(file_full_path);
+                dbInitialize(db_name);
+                db.serialize(function () {
+                                    
+                })
+                dropDown(db);
             });
 
-            let sqlCommandSubject = `SELECT DISTINCT Name Name FROM Subject`;
-            let subjectList = document.getElementById('select_subject');
-            db.all(sqlCommandSubject, [], (err, rows) => {
-                    if (err) {
-                        throw err;
-                    }
-                    rows.forEach((row) => {
-                        const option = document.createElement('option');
-                        const optionText = document.createTextNode(row.Name);
-                        option.appendChild(optionText);
-                        subjectList.appendChild(option);
-                    });
-                });
+            //dropdown
+            
 
             //dropdown
             
