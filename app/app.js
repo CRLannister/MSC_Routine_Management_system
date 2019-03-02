@@ -116,14 +116,14 @@ ipcMain.on('buttonClicked', function(e, buttonId){
   }
   
   else if(buttonId=="oldRoutine"){
-    console.log("update old routine");
+    console.log("view old routine");
   }
   
-  else if(buttonId == "addTeacher"){
+  else if(buttonId == "editTeacher"){
     createWindow("Add Teacher","addTeacher.html");
   }
 
-  else if(buttonId=="addCourse"){
+  else if(buttonId=="editCourse"){
     createWindow("Add Course","addSubject.html");
   }
 });

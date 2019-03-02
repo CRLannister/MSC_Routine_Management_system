@@ -25,10 +25,8 @@
 <body>
     <button type="button" id="newRoutine">New Routine</button></br>
     <button type="button" id="oldRoutine">Old Routines</button></br>
-    <button type="button" id="addTeacher">Add teacher</button></br>
-    <button type="button" id="delTeacher">Delete Teacher</button></br>
-    <button type="button" id="addCourse">Add Course</button></br>
-    <button type="button" id="delCourse">Delete Course</button></br>
+    <button type="button" id="editTeacher">Edit teacher</button></br>
+    <button type="button" id="editCourse">Edit Course</button></br>
 
     <!--scripts for each buttons.-->
     <script>
@@ -44,22 +42,15 @@
                 ipcRenderer.send('buttonClicked', 'oldRoutine');
                 console.log("from menu2");
             }
-            document.getElementById('addTeacher').onclick = function(e){
-                ipcRenderer.send('buttonClicked', 'addTeacher');
+            document.getElementById('editTeacher').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'editTeacher');
                 console.log("from menu3");
             }
-            document.getElementById('delTeacher').onclick = function(e){
-                ipcRenderer.send('buttonClicked', 'delTeacher');
+            document.getElementById('editCourse').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'editCourse');
                 console.log("from menu4");
             }
-            document.getElementById('addCourse').onclick = function(e){
-                ipcRenderer.send('buttonClicked', 'addCourse');
-                console.log("from menu5");
-            }
-            document.getElementById('delCourse').onclick = function(e){
-                ipcRenderer.send('buttonClicked', 'delCourse');
-                console.log("from menu6");
-            }
+
 
             
         </script>
