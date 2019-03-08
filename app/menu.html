@@ -36,19 +36,15 @@
 
             document.getElementById('newRoutine').onclick = function(e){
                 ipcRenderer.send('buttonClicked', 'newRoutine');
-                console.log('from menu 1');
             }
             document.getElementById('oldRoutine').onclick = function(e){
                 ipcRenderer.send('buttonClicked', 'oldRoutine');
-                console.log("from menu2");
             }
             document.getElementById('editTeacher').onclick = function(e){
                 ipcRenderer.send('buttonClicked', 'editTeacher');
-                console.log("from menu3");
             }
             document.getElementById('editCourse').onclick = function(e){
                 ipcRenderer.send('buttonClicked', 'editCourse');
-                console.log("from menu4");
             }
 
 

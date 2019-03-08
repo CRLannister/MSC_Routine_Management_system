@@ -29,7 +29,7 @@
       e.preventDefault();
       const teacher_name = document.querySelector('#item').value;
       const teacher_initials = document.querySelector('#teacherInitials').value;
-      console.log(ipcRenderer);
+      console.log(ipcRenderer); 
       ipcRenderer.send('Teacher:add', teacher_name,teacher_initials);
     }
   </script>

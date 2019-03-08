@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Edit Teacher</title>
+  <style>
+      .edit{
+          background-color: dodgerblue;
+          margin:5px;
+          padding:5px;
+      }
+      .delete{
+          background-color:#d50000;
+          margin:5px;
+          padding:5px;
+      }
+
+      .heads{
+          display:inline;
+          margin-right:125px;
+         
+      }
+      input{
+          margin-right:5px;
+          size:50;
+      }
+  </style>
+</head>
+<body>
+    <p class="heads">NAME</p>
+    <p class="heads">INITIALS</p>
+   
+    <form>
+    <script>
+        //dynamically form layout garnu paro  + add  functionalities to buttons :D
+        //Assuming teachers array is being retrieved from database.
+        var n = 3;
+        teachers = ["Ashish Bahadur Karki", "Sudeep Bhandari", "Sobit Ustam"];
+        initials = ["ABK", "SB", "SU"];
+        //Laying out the teachers name, "edit" and "delete" buttons.
+        for(i=0; i<n; i++){
+            document.write('<input type="text" name="teacher'+ i + '" value="'+ teachers[i] + '">');
+            document.write('<input type="text" name="initial'+ i + '" value="'+ initials[i] + '">');
+            document.write('<button class="edit" id="submitButton" >' + "SUBMIT" + '</button>');
+            document.write('<button class="delete" id="deleteButton" >' + "DELETE" + '</button>');
+            document.write('<br/>');
+        }
+
+    </script>
+    </form>
+</body>
+</html>
