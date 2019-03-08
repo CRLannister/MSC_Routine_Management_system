@@ -129,8 +129,8 @@
     var frst=0;
     var storez;
     var arr=["sub1","sub2","sub3","sub4","sub5","sub6"];
-        var days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"];
-        var demoo=["demo0","demo1","demo2","demo3","demo4"];
+    var days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"];
+    var demoo=["demo0","demo1","demo2","demo3","demo4"];
 //         e.onchange = function() {
 //     var strUser = e.options[e.selectedIndex].value;
     
@@ -370,6 +370,27 @@
       
 
       
+    </script>
+
+    <!--adding buttons for "save" and "print"-->
+    <br/>
+    <button type="button" id="saveRoutine">SAVE</button>
+    <button type="button" id="exportPDF">EXPORT PDF</button>
+    <button type="button" id="exportWord">EXPORT DOC</button>
+
+    <script>
+        document.getElementById("saveRoutine").onclick= function(e){
+            console.log("hello ");
+            ipcRenderer.send('buttonClicked', "saveRoutine");
+        }
+
+        document.getElementById("exportPDF").onclick= function(e){
+            console.log("hello ");
+        }
+
+        document.getElementById("exportWord").onclick= function(e){
+            console.log("hello ");
+        }
     </script>
 
 </body>

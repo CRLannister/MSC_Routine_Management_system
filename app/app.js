@@ -23,7 +23,7 @@ app.on('window-all-closed', function() {
 // initialization and ready for creating browser windows.
 app.on('ready', function() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({width: 1000, height: 720});
 
   // and load the index.html of the app.
   //mainWindow.loadURL('file://' + __dirname + '/index.html');
@@ -54,8 +54,8 @@ app.on('ready', function() {
 function createWindow(TITLE,HTML_FILE){
   addWindow = new BrowserWindow({
     show:false,
-    width: 800,
-    height:600,
+    width: 1000,
+    height:720,
     title:TITLE,
     //titleBarStyle: 'default',
     parent: mainWindow 
@@ -106,25 +106,29 @@ ipcMain.on('Database:add', function(e, item){
 
 
 //EDIT FROM PRASHANT
-//Below is the function to listen to button clicks in Main Menu.
-//Each button click sends a message "button clicked" and the Id of the button clicked.
+//Button clicks handler.
+//Every button in the program sends a "button clicked" event and ID as the parameter.
 //some clicks might not have functionality.
 
 ipcMain.on('buttonClicked', function(e, buttonId){
   if(buttonId==="newRoutine"){
-    createWindow("New Routine","databaseName.html");
+    createWindow("New Routine","index.html");
   }
   
   else if(buttonId=="oldRoutine"){
-    console.log("update old routine");
+    createWindow("Routine name", "index.html");
   }
   
-  else if(buttonId == "addTeacher"){
-    createWindow("Add Teacher","addTeacher.html");
+  else if(buttonId == "editTeacher"){
+    createWindow("Edit Teacher","editTeacher.html");
   }
 
-  else if(buttonId=="addCourse"){
-    createWindow("Add Course","addSubject.html");
+  else if(buttonId=="editCourse"){
+    createWindow("Edit Course","editSubject.html");
+  }
+
+  else if(buttonId=="saveRoutine"){
+    createWindow("Name of Routine", "databaseName.html");
   }
 });
 
