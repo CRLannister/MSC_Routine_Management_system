@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Edit Subjects</title>
+  <style>
+      .edit{
+          background-color: dodgerblue;
+          margin:5px;
+          padding:5px;
+      }
+      .delete{
+          background-color:#d50000;
+          margin:5px;
+          padding:5px;
+      }
+
+      .heads{
+          display:inline;
+          margin-right:125px;
+         
+      }
+      input{
+          margin-right:5px;
+          size:50;
+      }
+  </style>
+</head>
+<body>
+    <p class="heads">NAME</p>
+    <p class="heads">INITIALS</p>
+   
+    <form>
+    <script>
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+        //Assuming teachers array is being retrieved from database.
+        var n = 4;
+        subjects = ["Instru", "Graphics", "Music", "Software"];
+        initials = ["IN", "GR", "M", "SE"];
+        //Laying out the teachers name, "edit" and "delete" buttons.
+        for(i=0; i<n; i++){
+            document.write('<div id="column' + i + '">');
+            document.write('<input type="text" name="subject'+ i + '" value="'+ subjects[i] + '">');
+            document.write('<input type="text" name="initial'+ i + '" value="'+ initials[i] + '">');
+            document.write('<button class="edit" id="submitButton'+  i+ '" >' + "SUBMIT" + '</button>');
+            document.write('<button class="delete" id="deleteButton' + i + '" >' + "DELETE" + '</button>');
+            document.write('</div>');
+
+        }
+        
+        var buttons = document.getElementsByTagName("button");
+        var buttonsCount = buttons.length;
+        for (var i = 0; i <= buttonsCount; i += 1) {
+            buttons[i].onclick = function(e) {
+                if(this.id[0]=='s'){
+                    alert("submit");
+                    //handle the event and add changes in database ...
+                }
+
+                else if(this.id[0] == 'd'){
+                    var parentID = document.getElementById(this.id).parentElement.id;
+                    document.getElementById(parentID).outerHTML='';
+                    //handle this event and add changes in database
+                }
+            }
+        }
+       
+    </script>
+    </form>
+</body>
+</html>

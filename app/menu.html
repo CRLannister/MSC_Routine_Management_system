@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MSC ROUTINE GENERATOR</title>
+    
+    <style>
+        button {
+            margin-top: 4%;
+            margin-left: 25%;
+            padding: 14px 40px;
+            width: 50%;
+            border-radius: 8px;
+            background-color: #42a5f5;
+        }
+        button:hover {
+            background-color:#1e88e5;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+    <button type="button" id="newRoutine">New Routine</button></br>
+    <button type="button" id="oldRoutine">Old Routines</button></br>
+    <button type="button" id="editTeacher">Edit teacher</button></br>
+    <button type="button" id="editCourse">Edit Course</button></br>
+
+    <!--scripts for each buttons.-->
+    <script>
+            const electron = require('electron');
+            const {ipcRenderer} = electron;
+
+
+            document.getElementById('newRoutine').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'newRoutine');
+            }
+            document.getElementById('oldRoutine').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'oldRoutine');
+            }
+            document.getElementById('editTeacher').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'editTeacher');
+            }
+            document.getElementById('editCourse').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'editCourse');
+            }
+
+
+            
+        </script>
+
+  
+</body>
+
+</html>
