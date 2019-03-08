@@ -9,12 +9,18 @@ const {app, BrowserWindow, Menu, ipcMain} = electron;
 var fs = require('fs');
 const {shell} = require('electron') // deconstructing assignment
 
-
-var db='';
+db_name='dummydata.sqlite3';
 let mainWindow;
 let addWindow;
 const dir_prefix_name = app.getAppPath();
 
+var db_Path= dir_prefix_name + '/databases/' + db_name ;
+// console.log(dir_prefix_name);
+// var sqlite3 = require('sqlite3').verbose();
+
+// var db =  new sqlite3.Database(db_Path);
+// global.sharedObj = {prop1 :  db_Path};
+var db;
 
 app.on('window-all-closed', function() {
   app.quit();
@@ -47,6 +53,7 @@ app.on('ready', function() {
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   // Insert menu
   Menu.setApplicationMenu(mainMenu);
+  // mainWindow.webContents.send("dbName",db_name ,dir_prefix_name);
 
 });
 
@@ -95,21 +102,40 @@ ipcMain.on('Subject:add', function(e, Subject_name){
 });
 
 
-ipcMain.on('Database:add', function(e, db_name){
-  console.log(db_name);
-  mainWindow.webContents.send('DataBase:Create', db_name, dir_prefix_name);
+// ipcMain.on('Database:add', function(e, db_name){
+//   console.log(db_name);
+//   mainWindow.webContents.send('DataBase:Create', db_name, dir_prefix_name);
+//   addWindow.close();
+//   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+//   //addWindow = null;
+// });
+
+
+ipcMain.on('Routine:add', function(e, Routine_name){
+  console.log(Routine_name);
+  mainWindow.webContents.send('Routine:Create', Routine_name);
   addWindow.close();
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
   //addWindow = null;
 });
 
-ipcMain.on('Database:old', function(e, db_name){
-  console.log(db_name);
-  mainWindow.webContents.send('DataBase:append', db_name, dir_prefix_name);
+
+ipcMain.on('Routine:old', function(e, Routine_name){
+  console.log(Routine_name);
+  mainWindow.webContents.send('Routine:append', Routine_name);
   addWindow.close();
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
   //addWindow = null;
 });
+
+
+// ipcMain.on('Database:old', function(e, db_name){
+//   console.log(db_name);
+//   mainWindow.webContents.send('DataBase:append', db_name, dir_prefix_name);
+//   addWindow.close();
+//   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+//   //addWindow = null;
+// });
 
 
 //EDIT FROM PRASHANT
@@ -118,14 +144,24 @@ ipcMain.on('Database:old', function(e, db_name){
 //some clicks might not have functionality.
 
 ipcMain.on('buttonClicked', function(e, buttonId){
+  // if(buttonId==="newRoutine"){
+  //   createWindow("New Routine","databaseName.html");
+  // }
+
   if(buttonId==="newRoutine"){
-    createWindow("New Routine","databaseName.html");
+    createWindow("New Routine","RoutineName.html");
+    // mainWindow.webContents.send("dbName",db_name ,dir_prefix_name);
   }
   
   else if(buttonId=="oldRoutine"){
-    createWindow("old Routine","oldDb.html");
+    createWindow("old Routine","oldRoutine.html");
     console.log("update old routine");
   }
+
+  // else if(buttonId=="oldRoutine"){
+  //   createWindow("old Routine","oldDb.html");
+  //   console.log("update old routine");
+  // }
   
   else if(buttonId == "addTeacher"){
     createWindow("Add Teacher","addTeacher.html");
@@ -147,17 +183,33 @@ const mainMenuTemplate =  [
   {
     label: 'File',
     submenu:[
+      // {
+      //   label:'Update Old Routine',
+      //   accelerator:process.platform == 'darwin' ? 'Command+o' : 'Ctrl+o',
+      //   click(){
+
+      //     const { dialog } = require('electron');
+      //     var db_dir = dir_prefix_name + '/databases/';
+      //     old_db = dialog.showOpenDialog([BrowserWindow],{focus : [true]} ,{defaultPath : [db_dir]} ,{filters: [{name: 'databases', extensions: ['sqlite3'] }]} ,{ properties: ['openFile'] });
+      //     mainWindow.webContents.send('open:Db', String(old_db));
+      //     // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+ 
+      //   }
+      // },
+
       {
         label:'Update Old Routine',
         accelerator:process.platform == 'darwin' ? 'Command+o' : 'Ctrl+o',
         click(){
 
-          const { dialog } = require('electron');
-          var db_dir = dir_prefix_name + '/databases/';
-          old_db = dialog.showOpenDialog([BrowserWindow],{focus : [true]} ,{defaultPath : [db_dir]} ,{filters: [{name: 'databases', extensions: ['sqlite3'] }]} ,{ properties: ['openFile'] });
-          mainWindow.webContents.send('open:Db', String(old_db));
+          // const { dialog } = require('electron');
+          // var db_dir = dir_prefix_name + '/databases/';
+          // old_db = dialog.showOpenDialog([BrowserWindow],{focus : [true]} ,{defaultPath : [db_dir]} ,{filters: [{name: 'databases', extensions: ['sqlite3'] }]} ,{ properties: ['openFile'] });
+          // mainWindow.webContents.send('open:Db', String(old_db));
           // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
  
+          createWindow("New Routine","oldRoutine.html");
+
         }
       },
 
@@ -165,9 +217,17 @@ const mainMenuTemplate =  [
 	      label:'Create New Routine',
 	      accelerator:process.platform == 'darwin' ? 'Command+N' : 'Ctrl+N',
 	      click(){
-		      createWindow("New Routine","databaseName.html");
+		      createWindow("New Routine","RoutineName.html");
 	      }
       },
+
+      // {
+	    //   label:'Create New Routine',
+	    //   accelerator:process.platform == 'darwin' ? 'Command+N' : 'Ctrl+N',
+	    //   click(){
+		  //     createWindow("New Routine","databaseName.html");
+	    //   }
+      // },
 
       {
         label:'Print',

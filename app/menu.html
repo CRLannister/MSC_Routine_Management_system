@@ -35,21 +35,50 @@
 
     <!--scripts for each buttons.-->
     <script>
+           
             const electron = require('electron');
             const {ipcRenderer} = electron;
+            var sqlite3 = require('sqlite3').verbose();
+            var db_name = "dummydata.sqlite3";
+            var db_Path = __dirname + "/"+ db_name;
+            var db = new sqlite3.Database(db_Path);
+            // var remote = require('electron').remote;
+            // app = remote.require('app');
+            // var dir_prefi = app.getAppPath();
+            // ipcRenderer.on('dbName',(event,db_name1 ,dir_prefix_name1) => {
+            //     db_name = db_name1;
+            //     dir_prefix_name = dir_prefix_name1;
+            // });
+
+            ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
+                db.serialize(function () {
+                    db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+                    db.each("SELECT * FROM Teacher", function (err, row) {
+                        console.log(row);
+                    });
+                })
+            });
+
+            ipcRenderer.on('Subject:Store',(event,Subject_name) => {
+                db.serialize(function () {
+                    db.run("INSERT INTO Subject (`Name`) VALUES ( '"+Subject_name+"')");
+                })
+            });
 
 
             document.getElementById('newRoutine').onclick = function(e){
                 const { remote } = require('electron')
-                remote.getCurrentWindow().loadURL('file://' + __dirname + '/index.html')
-                ipcRenderer.send('buttonClicked', 'newRoutine');
+                remote.getCurrentWindow().loadURL('file://' + __dirname + '/index.html');
                 console.log('from menu 1');
+                ipcRenderer.send('buttonClicked', 'newRoutine');
+                // console.log('from menu 1');
             }
             document.getElementById('oldRoutine').onclick = function(e){
                 const { remote } = require('electron')
-                remote.getCurrentWindow().loadURL('file://' + __dirname + '/index.html')
-                ipcRenderer.send('buttonClicked', 'oldRoutine');
+                remote.getCurrentWindow().loadURL('file://' + __dirname + '/index.html');
                 console.log("from menu2");
+                ipcRenderer.send('buttonClicked', 'oldRoutine');
+                // console.log("from menu2");
             }
             document.getElementById('addTeacher').onclick = function(e){
                 ipcRenderer.send('buttonClicked', 'addTeacher');
