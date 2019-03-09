@@ -115,6 +115,7 @@
     <script>
   	  const electron = require('electron');
       const {ipcRenderer} = electron;
+      const { remote } = require('electron')
       var sqlite3 = require('sqlite3').verbose();
       var db_name = "dummydata.sqlite3";
       var db_Path = __dirname + "/"+ db_name;
@@ -282,6 +283,7 @@
             document.write('<label id="pdf-path"></label>');
             document.write('<button type="button" id="print-pdf">EXPORT PDF</button>');
             document.write('<button type="button" id="exportWord">EXPORT DOC</button>');
+            document.write('<button type="button" id="Back">Previous</button>');
     //         <button type="button" id="saveRoutine">SAVE</button>
     // <button type="button" id="exportPDF">EXPORT PDF</button>
     // <button type="button" id="exportWord">EXPORT DOC</button>
@@ -494,8 +496,14 @@
       ipcRenderer.on('Routine:Create', (event, Routine_name) => {
                 console.log(Routine_name);
                 dropDown();
+                db.serialize(function () {
+                    db.run("CREATE TABLE " + Routine_name + "(`Table_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`	TEXT NOT NULL,`Period`	INTEGER NOT NULL,`Teacher`	TEXT NOT NULL,`Subject`	TEXT NOT NULL)");
+
+                });
                 document.getElementById('Add_Changes').onclick = function(e){
                     db.serialize(function () {
+                        let sqlCommandTableDelete = "DROP TABLE " + Routine_name;
+                        db.run(sqlCommandTableDelete);
                         db.run("CREATE TABLE " + Routine_name + "(`Table_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`	TEXT NOT NULL,`Period`	INTEGER NOT NULL,`Teacher`	TEXT NOT NULL,`Subject`	TEXT NOT NULL)");
                         var teacherList_final = document.getElementsByClassName("select_teacher");
                         let teacherListArray_final = [].slice.call(teacherList_final);
@@ -525,6 +533,8 @@
                         }
                         // db.run("UPDATE `Routine_Table` SET `Day`=? WHERE _rowid_='1'");
                     });
+                    // remote.getCurrentWindow().loadURL('file://' + __dirname + '/menu.html');
+
                 }
                 
             });
@@ -595,6 +605,8 @@
                         }
                                         
                     });
+                    // remote.getCurrentWindow().loadURL('file://' + __dirname + '/menu.html');
+
                 }
                 // old_dropDown(db,Routine_name);
             });
@@ -610,6 +622,12 @@
                 const message = `Wrote pdf to : ${path}`;
                 document.getElementById('pdf-path').innerHTML = message;
             });
+
+            document.getElementById('Back').onclick = function(e){
+                    remote.getCurrentWindow().loadURL('file://' + __dirname + '/menu.html');
+            }
+
+
 
     </script>
 
