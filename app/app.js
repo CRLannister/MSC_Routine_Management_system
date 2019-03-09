@@ -1,14 +1,17 @@
 const electron = require('electron');
 const path = require('path');
 const url = require('url');
-const ipc= electron.ipcMain;
-const ipc_r=require('electron').ipcRenderer;
+// const ipc= electron.ipcMain;
+// const ipc_r=require('electron').ipcRenderer;
 //set Env
 process.env.NODE_ENV = 'development';
 const {app, BrowserWindow, Menu, ipcMain} = electron;
-var fs = require('fs');
+const fs = require('fs');
+const os = require('os');
 const {shell} = require('electron') // deconstructing assignment
-
+const dir_prefix_name = app.getAppPath();
+const pdf_path = dir_prefix_name + "/pdf_dir/";
+console.log(pdf_path);
 
 var db='';
 let mainWindow;
@@ -165,6 +168,22 @@ ipcMain.on('closeWindow', function(e){
   addWindow.close();
 });
 
+ipcMain.on('print-to-pdf', event => {
+  const pdfPath = path.join(pdf_path, 'DummyRoutine.pdf');
+  console.log(pdfPath);
+  const win = BrowserWindow.fromWebContents(event.sender);
+
+  win.webContents.printToPDF({}, (error, data) => {
+    if (error) return console.log(error.message);
+
+    fs.writeFile(pdfPath, data, err => {
+      if (err) return console.log(err.message);
+      shell.openExternal('file://' + pdfPath);
+      event.sender.send('wrote-pdf', pdfPath);
+    })
+    
+  })
+});
 
 //We won't really need custom menu bar after all those buttons in front page.
 //Only default menu will be available.

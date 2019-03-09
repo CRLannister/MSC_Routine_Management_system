@@ -278,9 +278,10 @@
             }
              }
             }
-            document.write('<button type="button" id="Add_Changes">SAVE</button></br>');
-            document.write('<button type="button" id="exportPDF">EXPORT PDF</button></br>');
-            document.write('<button type="button" id="exportWord">EXPORT DOC</button></br>');
+            document.write('<button type="button" id="Add_Changes">SAVE</button>');
+            document.write('<label id="pdf-path"></label>');
+            document.write('<button type="button" id="print-pdf">EXPORT PDF</button>');
+            document.write('<button type="button" id="exportWord">EXPORT DOC</button>');
     //         <button type="button" id="saveRoutine">SAVE</button>
     // <button type="button" id="exportPDF">EXPORT PDF</button>
     // <button type="button" id="exportWord">EXPORT DOC</button>
@@ -309,6 +310,7 @@
         
     //     })
     //   });
+    // require('./renderer.js');
 
       ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
         db.serialize(function () {
@@ -597,13 +599,24 @@
                 // old_dropDown(db,Routine_name);
             });
 
-      
+            const printPDFButton =document.getElementById('print-pdf');
+
+            printPDFButton.addEventListener('click',event => {
+                ipcRenderer.send('print-to-pdf');
+
+            });
+
+            ipcRenderer.on('wrote-pdf',(event,path) =>{
+                const message = `Wrote pdf to : ${path}`;
+                document.getElementById('pdf-path').innerHTML = message;
+            });
+
     </script>
 
     <!--adding buttons for "save" and "print"-->
     <br/>
     
-    <script>
+    <!-- <script>
         document.getElementById("saveRoutine").onclick= function(e){
             console.log("hello ");
             ipcRenderer.send('buttonClicked', "saveRoutine");
@@ -616,7 +629,7 @@
         document.getElementById("exportWord").onclick= function(e){
             console.log("hello ");
         }
-    </script>
+    </script> -->
 
 </body>
 
