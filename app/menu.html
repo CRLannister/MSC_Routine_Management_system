@@ -27,18 +27,33 @@
     <button type="button" id="oldRoutine">Old Routines</button></br>
     <button type="button" id="editTeacher">Edit teacher</button></br>
     <button type="button" id="editCourse">Edit Course</button></br>
+    <button type="button" id="addTeacher">Add teacher</button></br>
+    <button type="button" id="addCourse">Add Course</button></br>
+
 
     <!--scripts for each buttons.-->
     <script>
             const electron = require('electron');
             const {ipcRenderer} = electron;
+            var sqlite3 = require('sqlite3').verbose();
+            var db_name = "dummydata.sqlite3";
+            var db_Path = __dirname + "/"+ db_name;
+            var db = new sqlite3.Database(db_Path);
 
 
             document.getElementById('newRoutine').onclick = function(e){
+                const { remote } = require('electron')
+                remote.getCurrentWindow().loadURL('file://' + __dirname + '/index.html');
+                console.log('from menu 1');
                 ipcRenderer.send('buttonClicked', 'newRoutine');
+                // console.log('from menu 1');
             }
             document.getElementById('oldRoutine').onclick = function(e){
+                const { remote } = require('electron')
+                remote.getCurrentWindow().loadURL('file://' + __dirname + '/index.html');
+                console.log("from menu2");
                 ipcRenderer.send('buttonClicked', 'oldRoutine');
+                // console.log("from menu2");
             }
             document.getElementById('editTeacher').onclick = function(e){
                 ipcRenderer.send('buttonClicked', 'editTeacher');
@@ -46,7 +61,29 @@
             document.getElementById('editCourse').onclick = function(e){
                 ipcRenderer.send('buttonClicked', 'editCourse');
             }
+            document.getElementById('addTeacher').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'addTeacher');
+                console.log("from menu3");
+            }
+            document.getElementById('addCourse').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'addCourse');
+                console.log("from menu5");
+            }
 
+            ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
+                db.serialize(function () {
+                    db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+                    db.each("SELECT * FROM Teacher", function (err, row) {
+                        console.log(row);
+                    });
+                })
+            });
+
+            ipcRenderer.on('Subject:Store',(event,Subject_name) => {
+                db.serialize(function () {
+                    db.run("INSERT INTO Subject (`Name`) VALUES ( '"+Subject_name+"')");
+                })
+            });
 
             
         </script>

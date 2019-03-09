@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Delete Teacher</title>
+  <title>Old Routine</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 </head>
 <body>
   <div class="container">
     <form>
       <div>
-        <label>Enter Teacher Name</label>
+        <label>Enter old Routine Name</label>
         <input type="text" id="item" autofocus>
-	<label>Enter Initials</label>
-	<input type="text" id="teacherInitials" autofocus>
-
       </div>
       <button class="waves-effect waves-light btn" type="reset">Cancel</button>
-      <button class="waves-effect waves-light btn" type="submit">Add Teacher</button>
+      <button class="waves-effect waves-light btn" type="submit">Append changes to Routine</button>
     </form>
   </div>
 
@@ -27,10 +24,11 @@
 
     function submitForm(e){
       e.preventDefault();
-      const teacher_name = document.querySelector('#item').value;
-      const teacher_initials = document.querySelector('#teacherInitials').value;
-      console.log(ipcRenderer); 
-      ipcRenderer.send('Teacher:add', teacher_name,teacher_initials);
+      const item = document.querySelector('#item').value;
+	    //console.log(item);
+      //console.log(ipcRenderer);
+      
+      ipcRenderer.send('Routine:old', item);
     }
   </script>
 </body>

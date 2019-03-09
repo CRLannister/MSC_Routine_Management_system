@@ -8,11 +8,11 @@
   <div class="container">
     <form>
       <div>
-        <label>Enter Routine Name</label>
+        <label>Enter New Routine Name</label>
         <input type="text" id="item" autofocus>
       </div>
-      <button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button>
-      <button class="waves-effect waves-light btn" type="submit">Add Database</button>
+      <button class="waves-effect waves-light btn" type="reset">Cancel</button>
+      <button class="waves-effect waves-light btn" type="submit">Add Routine Table</button>
     </form>
   </div>
 
@@ -25,16 +25,11 @@
     function submitForm(e){
       e.preventDefault();
       const item = document.querySelector('#item').value;
-	    console.log(item);
-      console.log(ipcRenderer);
-      ipcRenderer.send('Database:add', item);
+	    //console.log(item);
+      //console.log(ipcRenderer);
+      
+      ipcRenderer.send('Routine:add', item);
     }
-
-    //sending message to exit the window if cancel button is clicked.
-    document.getElementById("cancelButton").onclick = function(e){
-      ipcRenderer.send('closeWindow');
-    }
-
   </script>
 </body>
 </html>

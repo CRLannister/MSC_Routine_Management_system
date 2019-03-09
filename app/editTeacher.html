@@ -25,47 +25,185 @@
       }
   </style>
 </head>
-<body>
+<body onload= buttonFunction()>
+    <div>
     <p class="heads">NAME</p>
     <p class="heads">INITIALS</p>
-   
-    <form>
+    </div>
+    <form id = "form_element">
+    </form>
+    <button class="submitChanges" id="submitChanges">SUBMIT_CHANGES</button>
+
     <script>
+        var  i = 0;
         const electron = require('electron');
         const {ipcRenderer} = electron;
-        //Assuming teachers array is being retrieved from database.
-        var n = 3;
-        teachers = ["Ashish Bahadur Karki", "Sudeep Bhandari", "Sobit Ustam"];
-        initials = ["ABK", "SB", "SU"];
-        //Laying out the teachers name, "edit" and "delete" buttons.
-        for(i=0; i<n; i++){
-            document.write('<div id="column' + i + '">');
-            document.write('<input type="text" name="teacher'+ i + '" value="'+ teachers[i] + '">');
-            document.write('<input type="text" name="initial'+ i + '" value="'+ initials[i] + '">');
-            document.write('<button class="edit" id="submitButton'+  i+ '" >' + "SUBMIT" + '</button>');
-            document.write('<button class="delete" id="deleteButton' + i + '" >' + "DELETE" + '</button>');
-            document.write('</div>');
+        var sqlite3 = require('sqlite3').verbose();
+        var db_name = "dummydata.sqlite3";
+        var db_Path = __dirname + "/"+ db_name;
+        var db = new sqlite3.Database(db_Path);
+        function buttonFunction(){
 
+            let sqlCommandTeacher = "SELECT * FROM Teacher";
+            let form_element = document.getElementById('form_element');
+            
+            db.serialize(function (){ 
+                db.all(sqlCommandTeacher, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+
+                    rows.forEach((row) => {
+
+                        const div_element = document.createElement('div');
+                        var input1 = document.createElement("input");
+                        input1.type = "text";
+                        input1.className = "TeacherName";
+                        input1.value = row.Name;
+                        div_element.appendChild(input1); 
+                        var input2 = document.createElement("input");
+                        input2.type = "text";
+                        input2.className = "InitialsName";
+                        input2.value = row.Initials;
+                        div_element.appendChild(input2); 
+                        // var submit_btn = document.createElement("button");
+                        // submit_btn.className = "edit";
+                        // submit_btn.id = "submitButton" + String(i);
+                        // var t = document.createTextNode("SUBMIT");
+                        // submit_btn.appendChild(t);
+                        // div_element.appendChild(submit_btn);
+                        var delete_btn = document.createElement("button");
+                        delete_btn.className = "delete";
+                        delete_btn.id = "deleteButton" + String(i);
+                        var d = document.createTextNode("DELETE");
+                        delete_btn.appendChild(d);
+                        div_element.appendChild(delete_btn); 
+                        form_element.appendChild(div_element);
+
+                        i = i+1;
+                    });
+                    
+                    //  db.close();
+                    console.log(i);
+                    second();
+                });
+            });
+            // db.close();
         }
-        
-        var buttons = document.getElementsByTagName("button");
-        var buttonsCount = buttons.length;
-        for (var i = 0; i <= buttonsCount; i += 1) {
-            buttons[i].onclick = function(e) {
-                if(this.id[0]=='s'){
-                    alert("submit");
-                    //handle the event and add changes in database ...
-                }
 
-                else if(this.id[0] == 'd'){
-                    var parentID = document.getElementById(this.id).parentElement.id;
-                    document.getElementById(parentID).outerHTML='';
+        function second(){
+            // var buttons = form_element.getElementsByTagName("button");
+
+            // let buttonListArray = [].slice.call(buttons);
+            // console.log(buttonListArray);
+            
+            var buttons = document.getElementsByTagName("button");
+            var buttonsCount = buttons.length - 1 ; //for last button     
+            // console.log(buttonsCount);
+            
+            // document.getElementsByTagName("button").onclick = function(e) {
+
+            //     console.log(this.id);
+
+            // }
+           
+            for (var j = 0; j < buttonsCount; j += 1) (function(j){
+                // document.getElementById("submitButton" + j).onclick= function(e) {
+                //      // let sqlCommandTeacherDelete = "DELETE * FROM Teacher";
+                //     let sqlCommandTeacherDelete = "DROP TABLE Teacher";
+                
+                //     var db = new sqlite3.Database(db_Path);
+                //     db.serialize(function () {
+                //         db.run(sqlCommandTeacherDelete);
+                //         db.run("CREATE TABLE Teacher(`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL,`Initials`	TEXT NOT NULL UNIQUE)");
+                //         var teacherList_final = document.getElementsByClassName("TeacherName");
+                //         let teacherListArray_final = [].slice.call(teacherList_final);
+                //         var db_teacher = [];
+                //         // console.log(teacherListArray_final);
+                //         for (i = 0; i < teacherListArray_final.length; i++){
+                //             db_teacher.push(teacherListArray_final[i].value);
+                //         }
+                //         console.log(db_teacher);
+
+                //         var InitialList_final = document.getElementsByClassName("InitialsName");
+                //         let InitialListArray_final = [].slice.call(InitialList_final);
+                //         var db_Initial = [];
+                //         for (i = 0; i < InitialListArray_final.length; i++){
+                //             db_Initial.push(InitialListArray_final[i].value);
+                //         }
+
+
+                //         console.log(db_Initial);
+                //         // var strUser = e.options[e.selectedIndex].text;
+                //         for(var j=0; j< db_teacher.length; j++){
+                //             // db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+                //             db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+db_teacher[j]+"','"+db_Initial[j]+"')");
+                            
+                //         }
+                //     });
+                //     console.log("finish");
+                // }
+                console.log(j);
+                    // alert("submit");
+                    //handle the event and add changes in database ...
+
+                document.getElementById("deleteButton" + j).onclick= function(e) {
+                    console.log(j);
+                    console.log(document.getElementById("deleteButton" + j));
+                    // var parentID = document.getElementById(this.id).parentElement.id;
+                    var parentID = document.getElementById("deleteButton" + j).parentNode;
+                    console.log(parentID);
+                    parentID.parentNode.removeChild(parentID);
+                    // document.getElementById(parentID).outerHTML='';
                     //handle this event and add changes in database
                 }
-            }
+            })(j);
+
+            
+        }       
+        
+        // var submit_change = document.createElement("button");
+        // submit_change.className = "submitChanges";
+        // submit_change.id = "submitChanges";
+        // var t = document.createTextNode("SUBMIT_CHANGES");
+        // submit_change.appendChild(t);
+        // document.body.appendChild(submit_change);
+
+        document.getElementById("submitChanges").onclick = function(e){
+            // let sqlCommandTeacherDelete = "DELETE * FROM Teacher";
+            let sqlCommandTeacherDelete = "DROP TABLE Teacher";
+            
+
+            db.serialize(function () {
+                db.run(sqlCommandTeacherDelete);
+                db.run("CREATE TABLE Teacher(`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL,`Initials`	TEXT NOT NULL UNIQUE)");
+                var teacherList_final = document.getElementsByClassName("TeacherName");
+                let teacherListArray_final = [].slice.call(teacherList_final);
+                var db_teacher = [];
+                // console.log(teacherListArray_final);
+                for (i = 0; i < teacherListArray_final.length; i++){
+                    db_teacher.push(teacherListArray_final[i].value);
+                }
+                console.log(db_teacher);
+
+                var InitialList_final = document.getElementsByClassName("InitialsName");
+                let InitialListArray_final = [].slice.call(InitialList_final);
+                var db_Initial = [];
+                for (i = 0; i < InitialListArray_final.length; i++){
+                    db_Initial.push(InitialListArray_final[i].value);
+                }
+
+
+                console.log(db_Initial);
+                // var strUser = e.options[e.selectedIndex].text;
+                for(var j=0; j< db_teacher.length; j++){
+                    // db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+                    db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+db_teacher[j]+"','"+db_Initial[j]+"')");
+                    
+                }
+            });
+            console.log("finish");
         }
-       
     </script>
-    </form>
 </body>
 </html>

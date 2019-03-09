@@ -104,6 +104,23 @@ ipcMain.on('Database:add', function(e, item){
   //addWindow = null;
 });
 
+ipcMain.on('Routine:add', function(e, Routine_name){
+  console.log(Routine_name);
+  mainWindow.webContents.send('Routine:Create', Routine_name);
+  addWindow.close();
+  // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+  //addWindow = null;
+});
+
+
+ipcMain.on('Routine:old', function(e, Routine_name){
+  console.log(Routine_name);
+  mainWindow.webContents.send('Routine:append', Routine_name);
+  addWindow.close();
+  // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+  //addWindow = null;
+});
+
 
 //EDIT FROM PRASHANT
 //Button clicks handler.
@@ -112,11 +129,13 @@ ipcMain.on('Database:add', function(e, item){
 
 ipcMain.on('buttonClicked', function(e, buttonId){
   if(buttonId==="newRoutine"){
-    createWindow("New Routine","index.html");
+    createWindow("New Routine","RoutineName.html");
+    // mainWindow.webContents.send("dbName",db_name ,dir_prefix_name);
   }
   
   else if(buttonId=="oldRoutine"){
-    createWindow("Routine name", "index.html");
+    createWindow("old Routine","oldRoutine.html");
+    console.log("update old routine");
   }
   
   else if(buttonId == "editTeacher"){
@@ -127,9 +146,18 @@ ipcMain.on('buttonClicked', function(e, buttonId){
     createWindow("Edit Course","editSubject.html");
   }
 
-  else if(buttonId=="saveRoutine"){
-    createWindow("Name of Routine", "databaseName.html");
+  else if(buttonId == "addTeacher"){
+    createWindow("Add Teacher","addTeacher.html");
   }
+
+  else if(buttonId=="addCourse"){
+    createWindow("Add Course","addSubject.html");
+  }
+
+
+  // else if(buttonId=="saveRoutine"){
+  //   createWindow("Name of Routine", "databaseName.html");
+  // }
 });
 
 //closing the window by "cancel" button.

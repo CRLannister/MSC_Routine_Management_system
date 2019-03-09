@@ -28,5 +28,12 @@
   "devDependencies": {
     "electron": "^1.4.10",
     "electron-builder": "^10.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CRLannister/MSC_Routine_Management_system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CRLannister/MSC_Routine_Management_system/issues"
   }
 }
