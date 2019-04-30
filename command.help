@@ -1,0 +1,5 @@
+npm i electron-packager --save-dev
+//added build line in package.json
+npm run build //makes executables in myApp folder according to edit in .json file
+//for packaging add line package in .json file //note no comment in josn available 
+npm run package

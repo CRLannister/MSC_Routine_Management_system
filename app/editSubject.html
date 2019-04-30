@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Edit Subjects</title>
+  <style>
+      .edit{
+          background-color: dodgerblue;
+          margin:5px;
+          padding:5px;
+      }
+      .delete{
+          background-color:#d50000;
+          margin:5px;
+          padding:5px;
+      }
+
+      .heads{
+          display:inline;
+          margin-right:125px;
+         
+      }
+      input{
+          margin-right:5px;
+          size:50;
+      }
+  </style>
+</head>
+<body onload= buttonFunction()>
+    <div>
+    <p class="heads">NAME</p>
+    <p class="heads">INITIALS</p>
+   </div>
+    <form id="form_element"></form>
+    <button class="submitChanges" id="submitChanges">SUBMIT_CHANGES</button>
+
+
+    <script>
+        var  i = 0;
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+        var sqlite3 = require('sqlite3').verbose();
+        var db_name = "dummydata.sqlite3";
+        var db_Path = __dirname + "/"+ db_name;
+        var db = new sqlite3.Database(db_Path);
+
+        function buttonFunction(){
+            let sqlCommandSubject = "SELECT * FROM Subject";
+            let form_element = document.getElementById('form_element');
+
+            db.serialize(function (){ 
+                db.all(sqlCommandSubject, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+
+                    rows.forEach((row) => {
+
+                        const div_element = document.createElement('div');
+                        var input1 = document.createElement("input");
+                        input1.type = "text";
+                        input1.className = "SubjectName";
+                        input1.value = row.Name;
+                        div_element.appendChild(input1); 
+                        var delete_btn = document.createElement("button");
+                        delete_btn.className = "delete";
+                        delete_btn.id = "deleteButton" + String(i);
+                        var d = document.createTextNode("DELETE");
+                        delete_btn.appendChild(d);
+                        div_element.appendChild(delete_btn); 
+                        form_element.appendChild(div_element);
+
+                        i = i+1;
+                    });
+        
+                    //  db.close();
+                    console.log(i);
+                    second();
+                });
+            });
+            // db.close();
+        }
+
+        function second(){
+            var buttons = document.getElementsByTagName("button");
+            var buttonsCount = buttons.length - 1 ;      //for last button
+            console.log(buttonsCount);
+
+            
+
+            for (var j = 0; j < buttonsCount; j += 1) (function(j){
+                console.log(j);
+                document.getElementById("deleteButton" + j).onclick= function(e) {
+                    console.log(j);
+                    console.log(document.getElementById("deleteButton" + j));
+                    // var parentID = document.getElementById(this.id).parentElement.id;
+                    var parentID = document.getElementById("deleteButton" + j).parentNode;
+                    console.log(parentID);
+                    parentID.parentNode.removeChild(parentID);
+                    // document.getElementById(parentID).outerHTML='';
+                    //handle this event and add changes in database
+                }
+            })(j);
+
+
+        }       
+
+        document.getElementById("submitChanges").onclick = function(e){
+            let sqlCommandSubjectDelete = "DROP TABLE Subject";
+            db.serialize(function () {
+                db.run(sqlCommandSubjectDelete);
+                db.run("CREATE TABLE Subject (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL UNIQUE)");
+                var subjectList_final = document.getElementsByClassName("SubjectName");
+                let subjectListArray_final = [].slice.call(subjectList_final);
+                var db_subject = [];
+                // console.log(teacherListArray_final);
+                for (i = 0; i < subjectListArray_final.length; i++){
+                    db_subject.push(subjectListArray_final[i].value);
+                }
+                console.log(db_subject);
+
+            for(var j=0; j< db_subject.length; j++){
+                db.run("INSERT INTO Subject (`Name`) VALUES ( '"+db_subject[j]+"')");
+                
+            }
+        });
+        console.log("finish");
+        }
+
+       
+    </script>
+</body>
+</html>

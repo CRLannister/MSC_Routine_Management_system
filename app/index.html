@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MSC_Routine_Generator</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!--nav-->
+    <!--div  class="nav-wrapper"-->
+            <!--a class="brand-logo center"-->
+                    <!-- <h5 align='center' 'style:color=black'>TRIBHUVAN UNIVERSITY</h5>
+                    <h5 align='center'>INSTITUTE OF ENGINEERING, PULCHOWK</h5>
+                    <h6 align='center'>Department of Electronics and Computer Engineering</h6>
+                    <h6 align='center'><b>M.Sc. Computer Systems and Knowledge Engineering</b></h6>
+                    <h6 align='center' ><b id='dbName'>Database_enabled: </b></h6> -->
+
+            <!--/a-->
+
+    <!--/div-->
+  <!--/nav-->
+  <div>
+    <div align="center">
+       TRIBHUVAN UNIVERSITY<br>INSTITUTE OF ENGINEERING , PULCHOWK CAMPUS<br>Department of Computer and Electronics Engineering<br>
+       <b>M.sc. Program</b>
+    </div>
+<div align="center" class="batch">Class Routine of
+    <select id="select_batch">
+            <option>2075</option>
+            <option>2074</option>
+            <option>2073</option>
+            <option>2072</option>
+            <option>2071</option>
+            <option>2070</option>
+    </select>
+    batch
+</div>
+
+<div class="mains">
+    <b>
+    <div class="level_masters" align="center">Level : Masters</div>
+    <div class="program">Program
+        <select id="select_program">
+            <option></option>
+            <option>1</option>
+            <option>2</option>
+
+        </select>
+    </div>
+    <div class="year">Year
+        <select id="select_year">
+            <option></option>
+            <option>1</option>
+            <option>2</option>
+
+        </select>
+
+    </div>
+    <div class="part">Part
+        <select id="select_part">
+            <option></option>
+            <option>1</option>
+            <option>2</option>
+
+        </select>
+    </div>
+    <div class="effective_date">Effective from
+        <input type="date" id="select_date">
+
+    </div>
+
+    </b>
+    </div>
+    <div class="second_info">
+        <b>
+
+    <div class="time">Time
+        <!-- <input type="time" id="select_time"> -->
+        <input type="number" id="select_firsttime" min="1" max="12" value=00>
+        :
+        <input type="number" id="select_secondtime" min="0" max="59" value=0>
+        <select id="select_timeperiod">
+            <option>AM</option>
+            <option>PM</option>
+        </select>
+      
+    </div>
+  
+    <div class="_interval">Interval of each period
+        <!-- <select id="select_interval" onchange="func1()">
+            <option >30</option>
+            <option >45</option>
+            <option value=50>50</option>
+        </select> -->
+        <input type="number" id="select_interval" 
+       min="10" max="60" value=45>
+        mins
+        <button class="btn_settime" onclick="myFunction_settime()">Set Time</button>
+    </div>
+    <div class="_periods">No.of periods
+        <select id="select_periods">
+            <option>4</option>
+        </select>
+    </div>
+    </b>
+    </div>
+    </div>
+
+
+
+  <!-- <input type="file" id="dirOpen" webkitdirectory /> -->
+  <ul></ul>
+
+    <ul id="database">
+    </ul>
+    <script>
+  	  const electron = require('electron');
+      const {ipcRenderer} = electron;
+      const { remote } = require('electron')
+      var sqlite3 = require('sqlite3').verbose();
+      var db_name = "dummydata.sqlite3";
+      var db_Path = __dirname + "/"+ db_name;
+      var db = new sqlite3.Database(db_Path);
+    //   document.getElementById('dbVal').innerHTML = db_name ;
+      var batch = document.getElementById("select_batch").value;
+      var program=document.getElementById("select_program").value;
+      var year=document.getElementById("select_year").value;
+      var part=document.getElementById("select_part").value;
+  
+      var e=document.getElementById("select_periods");
+     
+      var date=document.getElementById("select_date").value;
+    var isfirst=0;
+    var first=0;
+    var frst=0;
+    var storez;
+    var arr=["sub1","sub2","sub3","sub4","sub5","sub6"];
+    var days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"];
+    var demoo=["demo0","demo1","demo2","demo3","demo4"];
+//         e.onchange = function() {
+//     var strUser = e.options[e.selectedIndex].value;
+    
+// }
+        document.write('<table border=1 class="top_table">');
+      
+        document.write('<tr>');
+        for(var k=0;k<5;k++){
+           if (isfirst==0){
+            document.write('<th> '+"Day/time"+'</th>');
+            isfirst=1;  
+           }
+           else{
+             
+            document.write('<th width="25%">');
+                
+                if(k==1){
+            document.write('<p id="demo1"></p>');
+           
+                }
+                else if(k==2){
+                    document.write('<p id="demo2"></p>');
+
+                }
+                else if(k==3){
+                    document.write('<p id="demo3"></p>');
+
+                }
+                else if(k==4){
+                    document.write('<p id="demo4"></p>');
+
+                }
+           
+            
+
+           
+            document.write('</th>');
+          
+           }
+                   
+        }
+
+        document.write('</tr>');
+        
+        
+       
+        for(var i=0;i<days.length;i++){
+           // document.write('<tr><td>'+days[i]+'</td></tr>');
+           document.write('<tr>');
+           for(var j=0;j<3;j++){
+               if(first==0){
+               document.write('<td>'+days[i]+'</td>');
+               first=1;
+               }
+               else{
+                document.write('<td colspan=2 width="50%">'); 
+                   
+                       
+                            document.write('<table border=1 width="320" class="tabb">');
+                                    for(var l=0;l<2;l++){
+                            if (frst==0){
+                                document.write('<tr>');
+                                    document.write('<td  class="subject_value_option" id="subject_value_option">');
+                                document.write('<select style="width: 106%" class="select_subject"  id="select_subject">');
+                                document.write('<option></option>'); 
+                                
+                                document.write('</select>');
+                                document.write('</td>');
+                                document.write('</tr>');
+                                frst=1;
+                            }
+                            else{
+                                document.write('<tr>');
+                                document.write('<td width="50%" class="teacher_value_option" id="teacher_value_option">');
+                                document.write('<select style="width: 106%" class="select_teacher" id="select_teacher">');
+                                document.write('<option>'+""+'</option>');  
+                                
+                    
+                                document.write('</select>');
+                                document.write('</td>')
+                                document.write('</tr>');
+                                frst=0;
+                            }              
+                        }
+
+                        document.write('</table>');
+                        document.write('</td>');
+                    } 
+                }
+                first=0;
+                document.write('</tr>');
+            
+            }
+            
+            document.write('</table>');
+       
+        function myFunction_settime(){
+            var first_time=document.getElementById("select_firsttime").value;
+              var second_time=document.getElementById("select_secondtime").value;
+              var interval=document.getElementById("select_interval").value;
+              var time_period=document.getElementById("select_timeperiod").value;
+              if(interval==NaN){
+                  interval=0;
+              }
+             
+              if(second_time<10){
+                  second_time="0"+second_time;
+              }
+             
+             for(var i=1;i<=4;i++){
+                
+            
+              var new_time=parseInt(second_time)+parseInt(interval);
+              if(new_time>59){
+                  var subb=new_time-60;
+                  
+                  
+                  
+                  if(first_time<12){
+                      storez=first_time;
+                      first_time++;
+
+                  }
+                  else{
+                    storez=first_time;
+                    first_time=1;
+                  }
+                  if(subb<10 && subb>=0){
+                    
+                    subb="0"+subb;
+                           
+                
+                }
+                document.getElementById("demo"+i).innerHTML = storez+":"+second_time+"-"+first_time+":"+subb+" "+time_period;
+                second_time=subb;
+            }
+            else{
+                document.getElementById("demo"+i).innerHTML = first_time+":"+second_time+"-"+first_time+":"+new_time+" "+time_period;
+                second_time=new_time;
+
+            }
+             }
+            }
+            document.write('<button type="button" id="Add_Changes">SAVE</button>');
+            document.write('<label id="pdf-path"></label>');
+            document.write('<button type="button" id="print-pdf">EXPORT PDF</button>');
+            document.write('<button type="button" id="exportWord">EXPORT DOC</button>');
+            document.write('<button type="button" id="Back">Previous</button>');
+    //         <button type="button" id="saveRoutine">SAVE</button>
+    // <button type="button" id="exportPDF">EXPORT PDF</button>
+    // <button type="button" id="exportWord">EXPORT DOC</button>
+
+    //   ipcRenderer.on('dir:open', (event, arg) => {
+    //     document.getElementById('dirOpen').click(function(){
+
+    //     })
+    //   });
+
+      
+    //   var sqlite3 = require('sqlite3').verbose();
+    //   var db='';
+
+    //   ipcRenderer.on('DataBase:Create', (event, arg) => {
+    //     //var fs = require('fs');
+    //     //fs.c('../databases');
+    //     db= new sqlite3.Database(arg);
+    //     var init=document.getElementById('dbName').innerHTML ;
+    //     console.log(init);
+    //     document.getElementById('dbName').innerHTML= init+arg;
+    //     db.serialize(function () {
+    //       //db.run("CREATE TABLE Teacher (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT,`Initials`	TEXT)");
+    //       db.run("CREATE TABLE Teacher(`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL,`Initials`	TEXT NOT NULL UNIQUE)");
+    //       db.run("CREATE TABLE Subject (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL UNIQUE)");
+        
+    //     })
+    //   });
+    // require('./renderer.js');
+
+      ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
+        db.serialize(function () {
+          db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+        })
+
+        });
+
+        ipcRenderer.on('Subject:Store',(event,Subject_name) => {
+        db.serialize(function () {
+          db.run("INSERT INTO Subject (`Name`) VALUES ( '"+Subject_name+"')");
+        })
+
+        });
+        
+        //db.serialize(function () {
+        //db.run("CREATE TABLE lorem (info TEXT)");
+
+        /*var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+        for (var i = 0; i < 10; i++) {
+          stmt.run("Ipsum " + i);
+        }
+
+        stmt.finalize();
+
+        var rows = document.getElementById("database");
+        db.each("SELECT rowid AS id, info FROM lorem", function (err, row) {
+          var item = document.createElement("li");
+          item.textContent = "" + row.id + ": " + row.info;
+          rows.appendChild(item);
+        });
+      });
+
+      
+
+      db.close();
+      });
+      /*  var value =''
+	    ipcRenderer.on('Database:add', (e,res) => {
+		    value +=res;
+	    });
+	    console.log(value);
+      */
+
+      function dropDown (){
+                let sqlCommandTeacher = `SELECT DISTINCT Name Name FROM Teacher`;
+                let teacherList = document.getElementsByClassName('select_teacher');
+                let teacherListArray = [].slice.call(teacherList);
+                // console.log('Teacher list arr: '+ teacherListArray);
+                // console.log('Teacher list: ' + teacherList);
+                for (i = 0; i < teacherListArray.length; i++){
+                    while (teacherListArray[i].childNodes.length > 1) {
+                        teacherListArray[i].removeChild(teacherListArray[i].lastChild);
+                    }
+                }
+
+                db.all(sqlCommandTeacher, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+                    for (i = 0; i < teacherListArray.length; i++){
+                        rows.forEach((row) => {
+                            const option = document.createElement('option');
+                            const optionText = document.createTextNode(row.Name);
+                            option.appendChild(optionText);
+                            teacherListArray[i].appendChild(option);
+                        });
+                    }
+                });
+                let sqlCommandSubject = `SELECT DISTINCT Name Name FROM Subject`;
+                let subjectList = document.getElementsByClassName('select_subject');
+                let subjectListArray = [].slice.call(subjectList);
+                // console.log('Sub list : ' + subjectList);
+                db.all(sqlCommandSubject, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+                    for (i = 0; i < teacherListArray.length; i++){
+                        while (subjectListArray[i].childNodes.length > 1) {
+                            subjectListArray[i].removeChild(subjectListArray[i].lastChild);
+                        }
+                    }
+                    for( i = 0; i <subjectListArray.length; i++){
+                        rows.forEach((row) => {
+                            const option = document.createElement('option');
+                            const optionText = document.createTextNode(row.Name);
+                            option.appendChild(optionText);
+                            subjectListArray[i].appendChild(option);
+                        });
+                    }
+                });
+            }
+
+
+
+            function old_dropDown (table_name){
+                let sqlCommandTeacher = `SELECT DISTINCT Name Name FROM Teacher`;
+                let teacherList = document.getElementsByClassName('select_teacher');
+                let teacherListArray = [].slice.call(teacherList);
+                // console.log('Teacher list arr: '+ teacherListArray);
+                // console.log('Teacher list: ' + teacherList);
+                for (i = 0; i < teacherListArray.length; i++){
+                    while (teacherListArray[i].childNodes.length > 0) {
+                        teacherListArray[i].removeChild(teacherListArray[i].lastChild);
+                    }
+                }
+
+                let sqlCommandTeacher_routine = `SELECT Teacher Name FROM ` + table_name;
+                db.all(sqlCommandTeacher_routine, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+                    var i=0;
+                    rows.forEach((row) => {
+                        const option = document.createElement('option');
+                        const optionText = document.createTextNode(row.Name);
+                        option.appendChild(optionText);
+                        teacherListArray[i].appendChild(option);
+                        i=i+1;
+                    });
+                });
+
+
+
+                db.all(sqlCommandTeacher, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+                    for (i = 0; i < teacherListArray.length; i++){
+                        rows.forEach((row) => {
+                            const option = document.createElement('option');
+                            const optionText = document.createTextNode(row.Name);
+                            option.appendChild(optionText);
+                            teacherListArray[i].appendChild(option);
+                        });
+                    }
+                });
+                let sqlCommandSubject = `SELECT DISTINCT Name Name FROM Subject`;
+                let subjectList = document.getElementsByClassName('select_subject');
+                let subjectListArray = [].slice.call(subjectList);
+                // console.log('Sub list : ' + subjectList);
+               
+                for (i = 0; i < teacherListArray.length; i++){
+                    while (subjectListArray[i].childNodes.length > 0) {
+                        subjectListArray[i].removeChild(subjectListArray[i].lastChild);
+                    }
+                }
+
+                let sqlCommandSubject_routine = `SELECT Subject Name FROM ` + table_name;
+                db.all(sqlCommandSubject_routine, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+                    var i=0;
+                    rows.forEach((row) => {
+                        const option = document.createElement('option');
+                        const optionText = document.createTextNode(row.Name);
+                        option.appendChild(optionText);
+                        subjectListArray[i].appendChild(option);
+                        i=i+1;
+                    });
+                });
+
+                
+                db.all(sqlCommandSubject, [], (err, rows) => {
+                    if (err) {
+                        throw err;
+                    }
+                    for( i = 0; i <subjectListArray.length; i++){
+                        rows.forEach((row) => {
+                            const option = document.createElement('option');
+                            const optionText = document.createTextNode(row.Name);
+                            option.appendChild(optionText);
+                            subjectListArray[i].appendChild(option);
+                        });
+                    }
+                });
+            }
+
+      
+      ipcRenderer.on('Routine:Create', (event, Routine_name) => {
+                console.log(Routine_name);
+                dropDown();
+                db.serialize(function () {
+                    db.run("CREATE TABLE " + Routine_name + "(`Table_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`	TEXT NOT NULL,`Period`	INTEGER NOT NULL,`Teacher`	TEXT NOT NULL,`Subject`	TEXT NOT NULL)");
+
+                });
+                document.getElementById('Add_Changes').onclick = function(e){
+                    db.serialize(function () {
+                        let sqlCommandTableDelete = "DROP TABLE " + Routine_name;
+                        db.run(sqlCommandTableDelete);
+                        db.run("CREATE TABLE " + Routine_name + "(`Table_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`	TEXT NOT NULL,`Period`	INTEGER NOT NULL,`Teacher`	TEXT NOT NULL,`Subject`	TEXT NOT NULL)");
+                        var teacherList_final = document.getElementsByClassName("select_teacher");
+                        let teacherListArray_final = [].slice.call(teacherList_final);
+                        var routine_db_teacher = [];
+                        // console.log(teacherListArray_final);
+                        for (i = 0; i < teacherListArray_final.length; i++){
+                            routine_db_teacher.push(teacherListArray_final[i].value);
+                        }
+
+
+                        var subjectList_final = document.getElementsByClassName("select_subject");
+                        let subjectListArray_final = [].slice.call(subjectList_final);
+                        var routine_db_subject = [];
+                        for (i = 0; i < subjectListArray_final.length; i++){
+                            routine_db_subject.push(subjectListArray_final[i].value);
+                        }
+
+
+                        console.log(routine_db_teacher);
+                        // var strUser = e.options[e.selectedIndex].text;
+                        for(var i=1;i<=6;i++){ 
+                            for(var j=1; j<=2; j++){
+                                // db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+                                db.run("INSERT INTO " + Routine_name + "(`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')");
+                                
+                            }
+                        }
+                        // db.run("UPDATE `Routine_Table` SET `Day`=? WHERE _rowid_='1'");
+                    });
+                    // remote.getCurrentWindow().loadURL('file://' + __dirname + '/menu.html');
+
+                }
+                
+            });
+
+            // ipcRenderer.on('DataBase:Create', (event, db_name ,db_dir_prefix) => {
+            //     var file_full_path = db_dir_prefix+ '/databases/'+db_name + ".sqlite3";
+            //     console.log(file_full_path);
+            //     db= new sqlite3.Database(file_full_path);
+            //     dbInitialize(db_name);
+            //     db.serialize(function () {
+            //         db.run("CREATE TABLE Teacher(`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL,`Initials`	TEXT NOT NULL UNIQUE)");
+            //         db.run("CREATE TABLE Subject (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL UNIQUE)");
+                
+            //     })
+            //     dropDown(db);
+            // });
+
+            // ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
+            //     db.serialize(function () {
+            //         db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+            //         db.each("SELECT * FROM Teacher", function (err, row) {
+            //             console.log(row);
+            //         });
+            //     })
+            //     dropDown(db);
+            // });
+
+            // ipcRenderer.on('Subject:Store',(event,Subject_name) => {
+            //     db.serialize(function () {
+            //         db.run("INSERT INTO Subject (`Name`) VALUES ( '"+Subject_name+"')");
+            //     })
+            //     dropDown(db);
+            // });
+
+            ipcRenderer.on('Routine:append', (event, Routine_name) => {
+                console.log(Routine_name);
+                old_dropDown(Routine_name);
+                document.getElementById('Add_Changes').onclick = function(e){
+                    db.serialize(function () {
+                        let sqlCommandTableDelete = "DROP TABLE " + Routine_name;
+                        db.run(sqlCommandTableDelete);
+                        db.run("CREATE TABLE " + Routine_name + "(`Table_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`	TEXT NOT NULL,`Period`	INTEGER NOT NULL,`Teacher`	TEXT NOT NULL,`Subject`	TEXT NOT NULL)");
+                        var teacherList_final = document.getElementsByClassName("select_teacher");
+                        let teacherListArray_final = [].slice.call(teacherList_final);
+                        var routine_db_teacher = [];
+                        // console.log(teacherListArray_final);
+                        for (i = 0; i < teacherListArray_final.length; i++){
+                            routine_db_teacher.push(teacherListArray_final[i].value);
+                        }
+
+
+                        var subjectList_final = document.getElementsByClassName("select_subject");
+                        let subjectListArray_final = [].slice.call(subjectList_final);
+                        var routine_db_subject = [];
+                        for (i = 0; i < subjectListArray_final.length; i++){
+                            routine_db_subject.push(subjectListArray_final[i].value);
+                        }
+
+
+                        console.log(routine_db_teacher);
+                        // var strUser = e.options[e.selectedIndex].text;
+                        for(var i=1;i<=6;i++){ 
+                            for(var j=1; j<=2; j++){
+                                // db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
+                                db.run("INSERT INTO " + Routine_name + "(`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')");
+                                
+                            }
+                        }
+                                        
+                    });
+                    // remote.getCurrentWindow().loadURL('file://' + __dirname + '/menu.html');
+
+                }
+                // old_dropDown(db,Routine_name);
+            });
+
+            const printPDFButton =document.getElementById('print-pdf');
+
+            printPDFButton.addEventListener('click',event => {
+                ipcRenderer.send('print-to-pdf');
+
+            });
+
+            document.getElementById('exportWord').addEventListener('click', e => {
+                // ipcRenderer.send('export-word');
+                remote.getCurrentWindow().loadURL('file://' + __dirname + '/printable.html');
+            })            
+
+            ipcRenderer.on('wrote-pdf',(event,path) =>{
+                const message = `Wrote pdf to : ${path}`;
+                document.getElementById('pdf-path').innerHTML = message;
+            });
+
+            document.getElementById('Back').onclick = function(e){
+                    remote.getCurrentWindow().loadURL('file://' + __dirname + '/menu.html');
+            }
+
+
+
+    </script>
+
+    <!--adding buttons for "save" and "print"-->
+    <br/>
+    
+    <!-- <script>
+        document.getElementById("saveRoutine").onclick= function(e){
+            console.log("hello ");
+            ipcRenderer.send('buttonClicked', "saveRoutine");
+        }
+
+        document.getElementById("exportPDF").onclick= function(e){
+            console.log("hello ");
+        }
+
+        document.getElementById("exportWord").onclick= function(e){
+            console.log("hello ");
+        }
+    </script> -->
+
+</body>
+
+</html>

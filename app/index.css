@@ -1,0 +1,78 @@
+.routinn{
+    font-size: 8px;
+    text-align: center;
+    
+    }
+    .batch{
+    margin-top: 16px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    
+    }
+    .level_masters{
+    float: left;
+    margin-right: 18px;
+    
+    }
+    .program{
+        float: left;
+        margin-right: 18px;
+    }
+    .mains{
+        margin-top: 20px;
+    margin-left: 20px;
+    
+    
+    }
+    .year{
+    
+        float: left;
+        margin-right: 18px;
+    }
+    .part{
+        float: left;
+        margin-right: 18px;
+    }
+    .time{
+    
+        margin-right: 28px;
+        float: left;
+    }
+    ._periods{
+    float: left;
+    
+    
+    }
+    ._interval{
+        float: left;
+        margin-right: 28px;
+    }
+    .second_info{
+        margin-top: 10px;
+        margin-left: 20px;
+
+    }
+    
+    .tabb{
+        /* border: none !important; */
+        border-collapse:collapse;
+     border: 0;
+    }
+    .top_table{
+        border-collapse:collapse;
+    }
+   #select_teacher{
+
+    background: transparent;
+   }
+   .select_subject{
+       background: transparent;
+       margin: 0px;
+   }
+   input[type=number]{
+    width: 32px;
+} 
+   .btn_settime{
+    background-color: green;
+    color: aliceblue;
+}
