@@ -8,8 +8,18 @@
   <div class="container">
     <form>
       <div>
-        <label>Enter old Routine Name</label>
-        <input type="text" id="item" autofocus>
+      
+        <table border=1 width="320" class="tabb">
+          <tr>
+            <td>
+              <select style="width: 106%" id="table_dropdown">
+              <option> </option>
+              </select> 
+            </td>
+          </tr>
+
+        </table>
+        
       </div>
       <button class="waves-effect waves-light btn" type="reset">Cancel</button>
       <button class="waves-effect waves-light btn" type="submit">Append changes to Routine</button>
@@ -17,19 +27,53 @@
   </div>
 
   <script>
+    document.getElementById("table_dropdown").style.display = "inline"; 
     const electron = require('electron');
     const {ipcRenderer} = electron;
+    var sqlite3 = require('sqlite3').verbose();
+    var db_name = "dummydata.sqlite3";
+    var db_Path = __dirname + "/"+ db_name;
+    var db = new sqlite3.Database(db_Path);
+
+    function old_dropDown (db){
+      var table_names_query = "SELECT name FROM sqlite_master WHERE type='table';"
+
+      let tableList = document.getElementById('table_dropdown');
+      
+          while (tableList.childNodes.length > 1) {
+              tableList.removeChild(tableList.lastChild);
+          }
+      
+      db.all(table_names_query, [], (err, rows) => {
+          if (err) {
+              throw err;
+          }
+
+          var i=0;
+
+          rows.forEach((row) => {
+              if(row.name !== "Subject" && row.name !== "Teacher" && row.name !== "sqlite_sequence"){
+                const option = document.createElement('option');
+                const optionText = document.createTextNode(row.name);
+                option.appendChild(optionText);
+                tableList.appendChild(option);
+
+              }
+              i=i+1;
+          });
+      });
+      
+    }
+    old_dropDown(db);
 
     document.querySelector('form').addEventListener('submit', submitForm);
 
     function submitForm(e){
       e.preventDefault();
-      const item = document.querySelector('#item').value;
-	    //console.log(item);
-      //console.log(ipcRenderer);
-      
+      const item = document.querySelector('#table_dropdown').value;
       ipcRenderer.send('Routine:old', item);
     }
+
   </script>
 </body>
 </html>

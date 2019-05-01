@@ -44,6 +44,7 @@
         var db = new sqlite3.Database(db_Path);
 
         function buttonFunction(){
+
             let sqlCommandSubject = "SELECT * FROM Subject";
             let form_element = document.getElementById('form_element');
 
@@ -72,8 +73,8 @@
                         i = i+1;
                     });
         
-                    //  db.close();
-                    console.log(i);
+                    // console.log(i);
+
                     second();
                 });
             });
@@ -83,20 +84,24 @@
         function second(){
             var buttons = document.getElementsByTagName("button");
             var buttonsCount = buttons.length - 1 ;      //for last button
-            console.log(buttonsCount);
-
             
+            // console.log(buttonsCount);
 
             for (var j = 0; j < buttonsCount; j += 1) (function(j){
-                console.log(j);
+                
+                // console.log(j);
+
                 document.getElementById("deleteButton" + j).onclick= function(e) {
-                    console.log(j);
-                    console.log(document.getElementById("deleteButton" + j));
-                    // var parentID = document.getElementById(this.id).parentElement.id;
+
+                    // console.log(j);
+                    // console.log(document.getElementById("deleteButton" + j));
+
                     var parentID = document.getElementById("deleteButton" + j).parentNode;
-                    console.log(parentID);
+
+                    // console.log(parentID);
+
                     parentID.parentNode.removeChild(parentID);
-                    // document.getElementById(parentID).outerHTML='';
+
                     //handle this event and add changes in database
                 }
             })(j);
@@ -106,24 +111,31 @@
 
         document.getElementById("submitChanges").onclick = function(e){
             let sqlCommandSubjectDelete = "DROP TABLE Subject";
+
             db.serialize(function () {
                 db.run(sqlCommandSubjectDelete);
                 db.run("CREATE TABLE Subject (`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL UNIQUE)");
+
                 var subjectList_final = document.getElementsByClassName("SubjectName");
                 let subjectListArray_final = [].slice.call(subjectList_final);
                 var db_subject = [];
-                // console.log(teacherListArray_final);
+
+                // console.log(subjectListArray_final);
+                
                 for (i = 0; i < subjectListArray_final.length; i++){
                     db_subject.push(subjectListArray_final[i].value);
                 }
-                console.log(db_subject);
+                
+                // console.log(db_subject);
 
             for(var j=0; j< db_subject.length; j++){
                 db.run("INSERT INTO Subject (`Name`) VALUES ( '"+db_subject[j]+"')");
                 
             }
         });
-        console.log("finish");
+
+        // console.log("finish");
+        
         }
 
        

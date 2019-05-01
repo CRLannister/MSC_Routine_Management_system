@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+    /* @page { 
+        size: landscape;
+    }
+    body { 
+        writing-mode: tb-rl;
+    } */
+    </style>
+   <title>
+       Printable Routine
+   </title>
+</head>
+<body>
+    
+<script>
+
+//comments haru:
+// create element rather than document write....
+// writing format for document file for word
+
+//NOTE : .......Date ani time are hard coded ....for taking that from database or index.html we need to first store it as well in db....however if date and time are to be remained as it is...it seems fine...
+
+//also data from main for only different table/routines name info only....
+
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+    const { remote } = require('electron');
+    let doc_dest = "";
+    let doc_full_path = "";
+    let table_name = "";
+    // document.write('<div id = "a">');
+    var el_1 = document.createElement("div");
+    el_1.id = "a";
+    document.body.appendChild(el_1);
+
+
+    
+        // doc_dest = wordPath;
+        // doc_full_path = doc_dest + Routine_name + ".doc";
+
+
+    // document.write('<div align = "center">');
+    var el_2 = document.createElement("div");
+    el_2.align = "center";
+    el_2.id = "heading";
+    // el_2.innerHTML = "TRIBHUVAN UNIVERSITY  ";
+    document.getElementById("a").appendChild(el_2);
+
+    var el_3_1 = document.createElement("h4");
+    el_3_1.innerHTML = "TRIBHUVAN UNIVERSITY  ";
+    document.getElementById("heading").appendChild(el_3_1);
+
+    var el_3_2 = document.createElement("br");
+    document.getElementById("heading").appendChild(el_3_2);
+
+    var el_3_3 = document.createElement("h4");
+    el_3_3.innerHTML = "INSTITUTE OF ENGINEERING , PULCHOWK CAMPUS ";
+    document.getElementById("heading").appendChild(el_3_3);
+
+    var el_3_4 = document.createElement("br");
+    document.getElementById("heading").appendChild(el_3_4);
+
+    var el_3_5 = document.createElement("h4");
+    el_3_1.innerHTML = "Department of Computer and Electronics   Engineering  ";
+    document.getElementById("heading").appendChild(el_3_5);
+
+    var el_3_6 = document.createElement("br");
+    document.getElementById("heading").appendChild(el_3_6);
+
+    var el_3_7 = document.createElement("br");
+    document.getElementById("heading").appendChild(el_3_7);
+
+
+    // document.write('TRIBHUVAN UNIVERSITY  <br>  INSTITUTE OF ENGINEERING , PULCHOWK CAMPUS  <br>  Department of Computer and Electronics   Engineering  <br><br>');
+    // var el_3 = document.createElement("div");
+    // el_3.innerHTML = "TRIBHUVAN UNIVERSITY  "
+    // document.body.appendChild(el_2);
+
+    // document.write('</div>');
+   
+
+    // document.write('<table style="border-collapse: collapse;" cellpadding="15" border=1 id="top_table" align = "center">');
+    
+    var el_4 = document.createElement("table");
+    el_4.style.borderCollapse = "collapse";
+    // el_4.border-collapse = "collapse";
+
+    el_4.cellpadding = 15;
+    el_4.border = 1;
+    el_4.id = "top_table";
+    el_4.align = "center";
+    document.getElementById("a").appendChild(el_4);
+
+    // document.write('<tr>');
+    var el_5 = document.createElement("tr");
+    el_5.id = "top_row";
+    document.getElementById("top_table").appendChild(el_5);
+
+    // document.write('<th> ' + "Day/time" + '</th>');
+    var el_6 = document.createElement("th");
+    el_6.innerHTML = "Day/time";
+    document.getElementById("top_row").appendChild(el_6);
+
+
+    // document.write('<th> ' + "10:15-12:00" + '</th>');
+    var el_7 = document.createElement("th");
+    el_7.innerHTML = "10:15-12:00";
+    document.getElementById("top_row").appendChild(el_7);
+
+    // document.write('<th> ' + "1:00-2:45" + '</th>');
+    var el_8 = document.createElement("th");
+    el_8.innerHTML = "1:00-2:45";
+    document.getElementById("top_row").appendChild(el_8);
+
+
+    // document.write('</tr>');
+    var table = document.getElementById('top_table');
+    console.log("")
+
+    var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    const sqlite3 = require('sqlite3').verbose();
+    var db_name = "dummydata.sqlite3";
+    var db_Path = __dirname + "/" + db_name;
+    var db = new sqlite3.Database(db_Path);
+
+
+    //when control comes from main window to this window...then control sent to main process for data 
+
+    ipcRenderer.send('print-to-Word2');
+
+
+    //receiving data i.e table name from main process
+
+    ipcRenderer.on('doc_name',(event, Routine_name) =>{
+               table_name = Routine_name;
+        for(var i = 0; i< days.length; i++){
+            let sqlCommand = `SELECT Teacher Teacher, Subject Subject from "${table_name}" WHERE Day = "${days[i]}"`;
+            
+            // console.log(table_name);
+
+            //data for days column from this file...i.e hardcoded
+
+            let newRow = table.insertRow(i + 1);
+                var newCell = newRow.insertCell(0);
+                var newText = document.createTextNode(days[i]);
+                newCell.appendChild(newText);
+                let k = 0;
+
+            db.all(sqlCommand, [], (err, rows)=>{
+                if (err) {
+                    throw err;
+                }
+                //inserting rows after rows...in the document from the routine table
+
+                rows.forEach((row)=>{
+                    k++;
+                    let newCell1 = newRow.insertCell(k);
+                    let newText1 = document.createTextNode(row.Teacher +'\n' + row.Subject);
+                    console.log(row.Teacher);
+                    console.log(row.Subject);
+                    newCell1.appendChild(newText1);
+
+                    //this code for html file of document for line feed character to show effect
+
+                    document.body.style = "white-space: pre;"
+                })
+            })
+        }
+
+    
+        //ignoring this 2 lines as create element
+
+        // document.write('</table>');
+        // document.write('</div>');
+
+            
+    });
+
+
+    // exported function for converting the so build html file as doc_file to be a doc file.
+
+    //NOTE: if there is enough time or if it is asked of us, to set path of the exported doc_file in the project directory..
+    // then,..let's see afterwards....
+
+    function exportHTML(table_name){
+        var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+            "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+            "xmlns='http://www.w3.org/TR/REC-html40'>" +
+            "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+        var footer = "</body></html>";
+        var sourceHTML = header + document.getElementById("a").innerHTML + footer;
+        document.body.style = "white-space: pre;"
+
+        var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+        var fileDownload = document.createElement("a");
+        document.body.appendChild(fileDownload);
+        fileDownload.href = source;
+        doc_name = table_name + ".doc";
+        // doc_name = doc_full_path;
+        fileDownload.download = doc_name;
+        fileDownload.click();
+        document.body.removeChild(fileDownload);
+    }
+
+
+</script>
+
+
+
+<button id="btn-export" onclick="exportHTML(table_name);">Export to
+    word doc</button>
+
+ 
+
+</body>
+</html>

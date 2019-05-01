@@ -1,9 +1,6 @@
 const electron = require('electron');
 const path = require('path');
 const url = require('url');
-// const ipc= electron.ipcMain;
-// const ipc_r=require('electron').ipcRenderer;
-//set Env
 process.env.NODE_ENV = 'development';
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 const fs = require('fs');
@@ -11,11 +8,11 @@ const os = require('os');
 const {shell} = require('electron') // deconstructing assignment
 const dir_prefix_name = app.getAppPath();
 const pdf_path = dir_prefix_name + "/pdf_dir/";
-console.log(pdf_path);
-
+const word_path = dir_prefix_name + "/word_dir/";
 var db='';
 let mainWindow;
 let addWindow;
+let Routine_name = "";
 
 
 app.on('window-all-closed', function() {
@@ -27,10 +24,7 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1000, height: 720});
-
-  // and load the index.html of the app.
-  //mainWindow.loadURL('file://' + __dirname + '/index.html');
-     mainWindow.loadURL(url.format({
+    mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'menu.html'),
     protocol: 'file:',
     slashes:true
@@ -78,6 +72,7 @@ function createWindow(TITLE,HTML_FILE){
   addWindow.on('close', function(){
     addWindow = null;
   });
+  return addWindow;
 }
 
 
@@ -163,13 +158,16 @@ ipcMain.on('buttonClicked', function(e, buttonId){
   // }
 });
 
+
+// pdf print function
 //closing the window by "cancel" button.
 ipcMain.on('closeWindow', function(e){
   addWindow.close();
 });
 
-ipcMain.on('print-to-pdf', event => {
-  const pdfPath = path.join(pdf_path, 'DummyRoutine.pdf');
+ipcMain.on('print-to-pdf', function(event, table_name){
+  table_name_ext = table_name + '.pdf'
+  const pdfPath = path.join(pdf_path, table_name_ext);
   console.log(pdfPath);
   const win = BrowserWindow.fromWebContents(event.sender);
 
@@ -185,125 +183,15 @@ ipcMain.on('print-to-pdf', event => {
   })
 });
 
-//We won't really need custom menu bar after all those buttons in front page.
-//Only default menu will be available.
+// Receiving communication from index.html for new window creation and passing table_name info to main process..ie..app.js
 
-/*
-// Create menu template
-const mainMenuTemplate =  [
-  // Each object is a dropdown
-  {
-    label: 'File',
-    submenu:[
-      {
-        label:'Update Old Routine',
-        accelerator:process.platform == 'darwin' ? 'Command+o' : 'Ctrl+o',
-        click(){
-          ipcMain.on('dir:open', function(e, db){
-            console.log(db);
-            mainWindow.webContents.send('dir:open', db);
-            addWindow.close();
-            // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
-            //addWindow = null;
-          });
+ipcMain.on('print-to-Word', function(event, table_name) {
+      Routine_name = table_name;
+      secondWindow = createWindow("Word","printable.html");  
+});
 
-          //shell.openItem('./databases')
-          // fs.readFile(p, 'utf8', function (err, data) {
-          // if (err) return console.log(err);
-          // data is the contents of the text file we just read
+//receiving communication from printable.html for quering Routine_name information
 
-          
-        }
-      },
-
-      
-      {
-	      label:'Create New Routine',
-	      accelerator:process.platform == 'darwin' ? 'Command+N' : 'Ctrl+N',
-	      click(){
-		      createWindow("New Routine","databaseName.html");
-	      }
-      },
-
-      {
-        label:'Print',
-        accelerator:process.platform == 'darwin' ? 'Command+P' : 'Ctrl+P',
-        click(){
-         // createAddWindow();
-                print_page();
-        }
-      },
-      {
-        //label:'Clear Items',
-        label:'Save',
-        accelerator:process.platform == 'darwin' ? 'Command+s' : 'Ctrl+s',
-        click(){
-         // mainWindow.webContents.send('item:clear');
-
-        }
-      },
-      {
-        label: 'Quit',
-        accelerator:process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
-        click(){
-          app.quit();
-        }
-      }
-    ]
-  },
-  {
-    label: 'Instructor',
-	  submenu:[
-		 {
-		  	label:'Add Teacher',
-			  click(){
-				  createWindow("ADD TEACHER","addTeacher.html");
-			  }
-		  }
-	  ]
-  },
-
-  {
-    label:'Subject',
-	  submenu:[
-      {
-        label:'Add Subject',
-        click(){
-          createWindow("ADD SUBJECT","addSubject.html");
-        }
-      }
-    ]
-
-  },
-
-  {
-    label: 'About',
-  }
-];
-
-
-// If OSX, add empty object to menu
-if(process.platform == 'darwin'){
-  mainMenuTemplate.unshift({});
-}
-
-// Add developer tools option if in dev
-if(process.env.NODE_ENV !== 'production'){
-  mainMenuTemplate.push({
-    label: 'Developer Tools',
-    submenu:[
-      {
-        role: 'reload'
-      },
-      {
-        label: 'Toggle DevTools',
-        accelerator:process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
-        click(item, focusedWindow){
-          focusedWindow.toggleDevTools();
-        }
-      }
-    ]
-  });
-}
-
-*/
+ipcMain.on('print-to-Word2',function(e){
+      secondWindow.webContents.send('doc_name', Routine_name);
+    });
