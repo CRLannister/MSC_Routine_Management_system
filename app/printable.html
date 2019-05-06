@@ -32,9 +32,16 @@
     let doc_full_path = "";
     let table_name = "";
     // document.write('<div id = "a">');
-    var el_1 = document.createElement("div");
+
+    // let el_1_b = document.createElement("div");
+    // el_1_b.id = "b";
+    // document.body.appendChild(el_1_b);
+
+
+    let el_1 = document.createElement("div");
     el_1.id = "a";
     document.body.appendChild(el_1);
+    // document.getElementById("b").appendChild(el_1);
 
 
     
@@ -43,39 +50,63 @@
 
 
     // document.write('<div align = "center">');
-    var el_2 = document.createElement("div");
+    let el_2 = document.createElement("div");
     el_2.align = "center";
     el_2.id = "heading";
     // el_2.innerHTML = "TRIBHUVAN UNIVERSITY  ";
     document.getElementById("a").appendChild(el_2);
 
-    var el_3_1 = document.createElement("h4");
+    let el_3_1 = document.createElement("h4");
     el_3_1.innerHTML = "TRIBHUVAN UNIVERSITY  ";
     document.getElementById("heading").appendChild(el_3_1);
 
-    var el_3_2 = document.createElement("br");
-    document.getElementById("heading").appendChild(el_3_2);
+    // let el_3_2 = document.createElement("br");
+    // document.getElementById("heading").appendChild(el_3_2);
 
-    var el_3_3 = document.createElement("h4");
+    let el_3_3 = document.createElement("h4");
     el_3_3.innerHTML = "INSTITUTE OF ENGINEERING , PULCHOWK CAMPUS ";
     document.getElementById("heading").appendChild(el_3_3);
 
-    var el_3_4 = document.createElement("br");
-    document.getElementById("heading").appendChild(el_3_4);
+    // let el_3_4 = document.createElement("br");
+    // document.getElementById("heading").appendChild(el_3_4);
 
-    var el_3_5 = document.createElement("h4");
-    el_3_1.innerHTML = "Department of Computer and Electronics   Engineering  ";
+    let el_3_5 = document.createElement("h4");
+    el_3_5.innerHTML = "Department of Electronics and Computer Engineering  ";
     document.getElementById("heading").appendChild(el_3_5);
 
-    var el_3_6 = document.createElement("br");
-    document.getElementById("heading").appendChild(el_3_6);
+    // let el_3_6 = document.createElement("br");
+    // document.getElementById("heading").appendChild(el_3_6);
 
-    var el_3_7 = document.createElement("br");
-    document.getElementById("heading").appendChild(el_3_7);
+    let el_3_6_1 = document.createElement("h4");
+    el_3_6_1.innerHTML = "";
+    document.getElementById("heading").appendChild(el_3_6_1);
+
+    // let el_3_7 = document.createElement("br");
+    // document.getElementById("heading").appendChild(el_3_7);
+
+    let el_3_8 = document.createElement("div");
+    el_3_8.id = "course_div";
+    document.getElementById("heading").appendChild(el_3_8);
+
+    let el_3_8_1 = document.createElement("h5");
+    el_3_8_1.id = "course_type";
+    el_3_8_1.innerHTML = "Class Routine of Batch :  ";
+    document.getElementById("course_div").appendChild(el_3_8_1);
+
+
+    let el_3_8_2 = document.createElement("b");
+    el_3_8_2.innerHTML = "OKAy";
+    document.getElementById("course_type").appendChild(el_3_8_2);
+
+    let el_3_9 = document.createElement("div");
+    el_3_9.id = "level_bef_table";
+    document.getElementById("heading").appendChild(el_3_9);
+
+
 
 
     // document.write('TRIBHUVAN UNIVERSITY  <br>  INSTITUTE OF ENGINEERING , PULCHOWK CAMPUS  <br>  Department of Computer and Electronics   Engineering  <br><br>');
-    // var el_3 = document.createElement("div");
+    // let el_3 = document.createElement("div");
     // el_3.innerHTML = "TRIBHUVAN UNIVERSITY  "
     // document.body.appendChild(el_2);
 
@@ -84,7 +115,7 @@
 
     // document.write('<table style="border-collapse: collapse;" cellpadding="15" border=1 id="top_table" align = "center">');
     
-    var el_4 = document.createElement("table");
+    let el_4 = document.createElement("table");
     el_4.style.borderCollapse = "collapse";
     // el_4.border-collapse = "collapse";
 
@@ -95,36 +126,36 @@
     document.getElementById("a").appendChild(el_4);
 
     // document.write('<tr>');
-    var el_5 = document.createElement("tr");
+    let el_5 = document.createElement("tr");
     el_5.id = "top_row";
     document.getElementById("top_table").appendChild(el_5);
 
     // document.write('<th> ' + "Day/time" + '</th>');
-    var el_6 = document.createElement("th");
+    let el_6 = document.createElement("th");
     el_6.innerHTML = "Day/time";
     document.getElementById("top_row").appendChild(el_6);
 
 
     // document.write('<th> ' + "10:15-12:00" + '</th>');
-    var el_7 = document.createElement("th");
+    let el_7 = document.createElement("th");
     el_7.innerHTML = "10:15-12:00";
     document.getElementById("top_row").appendChild(el_7);
 
     // document.write('<th> ' + "1:00-2:45" + '</th>');
-    var el_8 = document.createElement("th");
+    let el_8 = document.createElement("th");
     el_8.innerHTML = "1:00-2:45";
     document.getElementById("top_row").appendChild(el_8);
 
 
     // document.write('</tr>');
-    var table = document.getElementById('top_table');
+    let table = document.getElementById('top_table');
     console.log("")
 
-    var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
     const sqlite3 = require('sqlite3').verbose();
-    var db_name = "dummydata.sqlite3";
-    var db_Path = __dirname + "/" + db_name;
-    var db = new sqlite3.Database(db_Path);
+    let db_name = "dummydata.sqlite3";
+    let db_Path = __dirname + "/" + db_name;
+    let db = new sqlite3.Database(db_Path);
 
 
     //when control comes from main window to this window...then control sent to main process for data 
@@ -135,8 +166,8 @@
     //receiving data i.e table name from main process
 
     ipcRenderer.on('doc_name',(event, Routine_name) =>{
-               table_name = Routine_name;
-        for(var i = 0; i< days.length; i++){
+        table_name = Routine_name;
+        for(let i = 0; i< days.length; i++){
             let sqlCommand = `SELECT Teacher Teacher, Subject Subject from "${table_name}" WHERE Day = "${days[i]}"`;
             
             // console.log(table_name);
@@ -144,8 +175,8 @@
             //data for days column from this file...i.e hardcoded
 
             let newRow = table.insertRow(i + 1);
-                var newCell = newRow.insertCell(0);
-                var newText = document.createTextNode(days[i]);
+                let newCell = newRow.insertCell(0);
+                let newText = document.createTextNode(days[i]);
                 newCell.appendChild(newText);
                 let k = 0;
 
@@ -158,14 +189,20 @@
                 rows.forEach((row)=>{
                     k++;
                     let newCell1 = newRow.insertCell(k);
-                    let newText1 = document.createTextNode(row.Teacher +'\n' + row.Subject);
+                    teacher_name = document.createElement("p")
+                    teacher_name.innerHTML = row.Teacher;
+                    subject_name = document.createElement("p");
+                    subject_name.innerHTML = row.Subject;
+                    // let newText1 = document.createTextNode(row.Teacher +'\n' + row.Subject);
                     console.log(row.Teacher);
                     console.log(row.Subject);
-                    newCell1.appendChild(newText1);
+                    // newCell1.appendChild(newText1);
+                    newCell1.appendChild(teacher_name);
+                    newCell1.appendChild(subject_name);
 
                     //this code for html file of document for line feed character to show effect
 
-                    document.body.style = "white-space: pre;"
+                    // document.body.style = "white-space: pre;"
                 })
             })
         }
@@ -186,19 +223,19 @@
     // then,..let's see afterwards....
 
     function exportHTML(table_name){
-        var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+        let header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
             "xmlns:w='urn:schemas-microsoft-com:office:word' " +
             "xmlns='http://www.w3.org/TR/REC-html40'>" +
             "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
-        var footer = "</body></html>";
-        var sourceHTML = header + document.getElementById("a").innerHTML + footer;
-        document.body.style = "white-space: pre;"
+        let footer = "</body></html>";
+        let sourceHTML = header + document.getElementById("a").innerHTML + footer;
+        // document.body.style = "white-space: pre;"
 
-        var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-        var fileDownload = document.createElement("a");
+        let source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+        let fileDownload = document.createElement("a");
         document.body.appendChild(fileDownload);
         fileDownload.href = source;
-        doc_name = table_name + ".doc";
+        doc_name = table_name + ".docx";
         // doc_name = doc_full_path;
         fileDownload.download = doc_name;
         fileDownload.click();
