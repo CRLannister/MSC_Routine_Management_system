@@ -546,6 +546,30 @@
             ipcRenderer.on('Routine:append', (event, routine_name) => {
                 Routine_name = routine_name;
 
+                let batch_yr_val = 5;
+                let prog_full_val = "v";
+                let prog_acr_val = "r";
+                let year_rot_val = 6;
+                let yr_part_val = 3;
+
+                db.serialize(function () {
+
+                    let initial_sql_command = `SELECT Batch Batch, Program_full Program_full, Program_acronym Program_acronym, Year Year, Part Part from "${Routine_name}" WHERE Table_id = 1`;
+                    db.get(initial_sql_command,(err, row) => {
+                        if (err) {
+                            return console.error(err.message);
+                        }
+                        batch_yr_val = row.Batch;
+                        prog_full_val = row.Program_full;
+                        prog_acr_val = row.Program_acronym;
+                        year_rot_val = row.Year;
+                        yr_part_val = row.Part;
+                        console.log(year_rot_val);
+                        console.log(yr_part_val);
+
+                    });
+                });
+
                 // console.log(Routine_name);
                 
                 old_dropDown(Routine_name);
@@ -581,7 +605,9 @@
 
                         for(let i=1;i<=6;i++){ 
                             for(let j=1; j<=2; j++){
-                                db.run("INSERT INTO " + Routine_name + "(`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')");  
+                                // db.run("INSERT INTO " + Routine_name + "(`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')"); 
+
+                                db.run("INSERT INTO " + Routine_name + "(`Batch`,`Program_full`,`Program_acronym`,`Year`,`Part`,`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+ batch_yr_val+"','"+prog_full_val+"','"+prog_acr_val+"','"+year_rot_val+"','"+yr_part_val+"','"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')"); 
                             }
                         }
                                         

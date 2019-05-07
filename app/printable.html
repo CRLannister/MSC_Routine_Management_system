@@ -197,7 +197,76 @@
     let Program_acronym_name = "R";
     let Year_yr = 1999;
     let Part_yr = 2;
+    var supervisor_name = "z";
+    var supervisor_initials = "b";
+    var supervisor_position = "r";
 
+    db.serialize(function () {
+
+            let supervisor_sql_command = `SELECT Name Name, Initials Initials, Position Position from Supervisor WHERE Id = 1`;
+            db.get(supervisor_sql_command,(err, row) => {
+                if (err) {
+                    return console.error(err.message);
+                }
+                supervisor_name =row.Name;
+                supervisor_initials = row.Initials;
+                supervisor_position = row.Position;
+
+
+                let el_3_9_0 = document.createElement("br");
+                document.getElementById("a").appendChild(el_3_9_0);
+
+
+                let el_9= document.createElement("div");
+                let el_9_1 = document.createElement("p");
+                el_9_1.innerHTML = "..................................................................";
+                el_9.appendChild(el_9_1);
+
+                let el_9_2 = document.createElement("p");
+                el_9_2.innerHTML = supervisor_name;
+                el_9.appendChild(el_9_2);
+
+                let el_9_3 = document.createElement("p");
+                el_9_3.innerHTML = supervisor_position;
+                el_9.appendChild(el_9_3);
+
+                let el_9_4 = document.createElement("p")
+                el_9_4.id = "sup_course";
+                el_9_4.innerHTML = "c";
+                el_9.appendChild(el_9_4);
+
+                document.getElementById("a").appendChild(el_9);
+                
+
+
+            });
+            
+        });
+
+
+
+    // let el_3_9_0 = document.createElement("br");
+    // document.getElementById("a").appendChild(el_3_9_0);
+
+
+    // let el_9= document.createElement("div");
+    // let el_9_1 = document.createElement("p");
+    // el_9_1.innerHTML = "..................................................................";
+    // el_9.appendChild(el_9_1);
+
+    // let el_9_2 = document.createElement("p");
+    // el_9_2.innerHTML = supervisor_name;
+    // el_9.appendChild(el_9_2);
+
+    // let el_9_3 = document.createElement("p");
+    // el_9_3.innerHTML = supervisor_position;
+    // el_9.appendChild(el_9_3);
+
+    // let el_9_4 = document.createElement("p")
+    // el_9_4.innerHTML = "c";
+    // el_9.appendChild(el_9_4);
+
+    // document.getElementById("a").appendChild(el_9);
 
     //when control comes from main window to this window...then control sent to main process for data 
 
@@ -229,6 +298,7 @@
                 document.getElementById("Program_id").innerHTML += Program_acronym_name ;
                 document.getElementById("year_id").innerHTML += Year_yr.toString() ;
                 document.getElementById("part_id").innerHTML += Part_yr.toString() ;
+                document.getElementById("sup_course").innerHTML = Program_full_name;
 
             });
 
@@ -308,16 +378,16 @@
         document.body.removeChild(fileDownload);
     }
 
-    document.getElementById("cancelButton").onclick = function(e){
-        ipcRenderer.send('closeWindow');
-    }
+    // document.getElementById("cancelButton").onclick = function(e){
+    //     ipcRenderer.send('closeWindow');
+    // }
 </script>
 
 
 
 <button id="btn-export" onclick="exportHTML(table_name);">Export to word doc</button>
 
-<button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button>
+<!-- <button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button> -->
 
 
  
