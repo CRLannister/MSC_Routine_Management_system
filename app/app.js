@@ -9,10 +9,10 @@ const {shell} = require('electron') // deconstructing assignment
 const dir_prefix_name = app.getAppPath();
 const pdf_path = dir_prefix_name + "/pdf_dir/";
 const word_path = dir_prefix_name + "/word_dir/";
-var db='';
+let db='';
 let mainWindow;
 let addWindow;
-let Routine_name = "";
+let Table_name = "";
 
 
 app.on('window-all-closed', function() {
@@ -84,6 +84,16 @@ ipcMain.on('Teacher:add', function(e, teacher_name, teacher_initials){
   //addWindow = null;
 });
 
+ipcMain.on('Supervisor:add', function(e, Supervisor_name, Supervisor_initials, Supervisor_position){
+  // console.log(Supervisor_name);
+  // console.log(Supervisor_initials);
+  // console.log(Supervisor_position);
+  mainWindow.webContents.send('Supervisor:Store',Supervisor_name, Supervisor_initials,Supervisor_position);
+  addWindow.close();
+  // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
+  //addWindow = null;
+});
+
 
 ipcMain.on('Subject:add', function(e, Subject_name){
   mainWindow.webContents.send('Subject:Store',Subject_name);
@@ -102,9 +112,10 @@ ipcMain.on('Database:add', function(e, item){
   //addWindow = null;
 });
 
-ipcMain.on('Routine:add', function(e, Routine_name){
-  console.log(Routine_name);
-  mainWindow.webContents.send('Routine:Create', Routine_name);
+ipcMain.on('Routine:add', function(e, Routine_name, batch_yr, prog_full, prog_acr, year_rot, yr_part){
+  Table_name = Routine_name;
+  console.log(Table_name);    
+  mainWindow.webContents.send('Routine:Create', Table_name,batch_yr, prog_full, prog_acr, year_rot, yr_part);
   addWindow.close();
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
   //addWindow = null;
@@ -112,8 +123,9 @@ ipcMain.on('Routine:add', function(e, Routine_name){
 
 
 ipcMain.on('Routine:old', function(e, Routine_name){
-  console.log(Routine_name);
-  mainWindow.webContents.send('Routine:append', Routine_name);
+  Table_name = Routine_name;
+  console.log(Table_name);
+  mainWindow.webContents.send('Routine:append', Table_name);
   addWindow.close();
   // Still have a reference to addWindow in memory. Need to reclaim memory (Grabage collection)
   //addWindow = null;
@@ -151,6 +163,12 @@ ipcMain.on('buttonClicked', function(e, buttonId){
   else if(buttonId=="addCourse"){
     createWindow("Add Course","addSubject.html");
   }
+  else if(buttonId=="addSupervisor"){
+    createWindow("Add Course","addSupervisor.html");
+  }
+  else if(buttonId=="editSupervisor"){
+    createWindow("Add Course","Edit_supervisor.html");
+  }
 
 
   // else if(buttonId=="saveRoutine"){
@@ -163,6 +181,10 @@ ipcMain.on('buttonClicked', function(e, buttonId){
 //closing the window by "cancel" button.
 ipcMain.on('closeWindow', function(e){
   addWindow.close();
+});
+
+ipcMain.on('hideWindow', function(e){
+  addWindow.hide();
 });
 
 ipcMain.on('print-to-pdf', function(event, table_name){
@@ -186,12 +208,14 @@ ipcMain.on('print-to-pdf', function(event, table_name){
 // Receiving communication from index.html for new window creation and passing table_name info to main process..ie..app.js
 
 ipcMain.on('print-to-Word', function(event, table_name) {
-      Routine_name = table_name;
+      Table_name = table_name;
       secondWindow = createWindow("Word","printable.html");  
 });
 
 //receiving communication from printable.html for quering Routine_name information
 
 ipcMain.on('print-to-Word2',function(e){
-      secondWindow.webContents.send('doc_name', Routine_name);
-    });
+  console.log("yaay");
+  console.log(Table_name);
+  secondWindow.webContents.send('doc_name', Table_name);
+});

@@ -9,9 +9,19 @@
     <form>
       <div>
         <label>Enter New Routine Name</label>
-        <input type="text" id="item" autofocus>
+        <input type="text" id="item" autofocus placeholder="BCT073_2_2 .. Note:  Start with a character">
+        <label>Enter Batch Year</label>
+        <input type="text" id="batch_yr" autofocus placeholder="2073">
+        <label>Enter Program</label>
+        <input type="text" id="prog_full" autofocus placeholder="M.Sc. Computer Systems and Knowledge Engineering Program">
+        <label>Enter Program Acronym</label>
+        <input type="text" id="prog_acr" autofocus placeholder="MSCKSE">
+        <label>Year</label>
+        <input type="text" id="year_rot" autofocus placeholder="2">
+        <label>Part</label>
+        <input type="text" id="yr_part" autofocus placeholder="2">
       </div>
-      <button class="waves-effect waves-light btn" type="reset">Cancel</button>
+      <button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button>
       <button class="waves-effect waves-light btn" type="submit">Add Routine Table</button>
     </form>
   </div>
@@ -25,11 +35,21 @@
     function submitForm(e){
       e.preventDefault();
       const item = document.querySelector('#item').value;
+      const batch_yr = document.querySelector('#batch_yr').value;
+      const prog_full = document.querySelector('#prog_full').value;
+      const prog_acr = document.querySelector('#prog_acr').value;
+      const year_rot = document.querySelector('#year_rot').value;
+      const yr_part = document.querySelector('#yr_part').value;
+
 	    //console.log(item);
       //console.log(ipcRenderer);
       
-      ipcRenderer.send('Routine:add', item);
+      ipcRenderer.send('Routine:add', item , batch_yr, prog_full, prog_acr, year_rot, yr_part);
+      
     }
+    document.getElementById("cancelButton").onclick = function(e){
+        ipcRenderer.send('closeWindow');
+      }
   </script>
 </body>
 </html>

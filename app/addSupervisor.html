@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Add Supervisor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+</head>
+<body>
+  <div class="container">
+    <form>
+      <div>
+        <label>Enter Supervisor Name</label>
+        <input type="text" id="item" autofocus>
+	      <label>Enter Initials</label>
+	      <input type="text" id="SupervisorInitials" autofocus>
+        <label>Enter Position</label>
+        <input type="text" id="SupervisorPosition" autofocus>
+
+      </div>
+      <button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button>
+      <button class="waves-effect waves-light btn" type="submit">Add Supervisor</button>
+    </form>
+  </div>
+
+  <script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+
+    document.querySelector('form').addEventListener('submit', submitForm);
+
+    function submitForm(e){
+      e.preventDefault();
+      const Supervisor_name = document.querySelector('#item').value;
+      const Supervisor_initials = document.querySelector('#SupervisorInitials').value;
+      const Supervisor_position = document.querySelector('#SupervisorPosition').value;
+      console.log(ipcRenderer);
+      ipcRenderer.send('Supervisor:add', Supervisor_name,Supervisor_initials,Supervisor_position);
+    }
+
+    //sending message to exit the window if cancel button is clicked.
+    document.getElementById("cancelButton").onclick = function(e){
+      ipcRenderer.send('closeWindow');
+    }
+
+  </script>
+</body>
+</html>

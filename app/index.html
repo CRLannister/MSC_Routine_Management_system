@@ -12,7 +12,7 @@
                <b>M.sc. Program</b>
 
             </div>
-            <div align="center" class="batch">Class Routine of
+            <!-- <div align="center" class="batch">Class Routine of
                 <select id="select_batch">
                     <option>2075</option>
                     <option>2074</option>
@@ -22,36 +22,42 @@
                     <option>2070</option>
                 </select>
                 batch
-            </div>
+            </div> -->
 
             <div class="mains">
                 <b>
                 <div class="level_masters" align="center">Level : Masters</div>
 
-                <div class="program">Program
+                <!-- <form>
+                  Program : <input type="text" name="program_name"><br>
+                  Last name: <input type="text" name="lname"><br>
+                  <input type="submit" value="Submit">
+                </form>  -->
+
+                <!-- <div class="program">Program
                     <select id="select_program">
                         <option></option>
                         <option>1</option>
                         <option>2</option>
                     </select>
-                </div>
+                </div> -->
 
-                <div class="year">Year
+                <!-- <div class="year">Year
                     <select id="select_year">
                         <option></option>
                         <option>1</option>
                         <option>2</option>
                     </select>
-                </div>
+                </div> -->
 
-                <div class="part">Part
+                <!-- <div class="part">Part
                     <select id="select_part">
                         <option></option>
                         <option>1</option>
                         <option>2</option>
 
                     </select>
-                </div>
+                </div> -->
 
                 <div class="effective_date">Effective from
                     <input type="date" id="select_date">
@@ -107,10 +113,10 @@
             let db_name = "dummydata.sqlite3";
             let db_Path = __dirname + "/"+ db_name;
             let db = new sqlite3.Database(db_Path);
-            let batch = document.getElementById("select_batch").value;
-            let program=document.getElementById("select_program").value;
-            let year=document.getElementById("select_year").value;
-            let part=document.getElementById("select_part").value;
+            // let batch = document.getElementById("select_batch").value;
+            // let program=document.getElementById("select_program").value;
+            // let year=document.getElementById("select_year").value;
+            // let part=document.getElementById("select_part").value;
             let e=document.getElementById("select_periods");
             let date=document.getElementById("select_date").value;
             let isfirst=0;
@@ -245,18 +251,35 @@
                 }
             }
 
+
+
             document.write('<button type="button" id="Add_Changes">SAVE</button>');
             document.write('<label id="pdf-path"></label>');
             document.write('<button type="button" id="print-pdf">EXPORT PDF</button>');
             document.write('<label id="Word-path"></label>');
             document.write('<button type="button" id="exportWord">EXPORT DOC</button>');
             document.write('<button type="button" id="Back">Previous</button>');
+
+            //doesn't think this below code is required as it works from menu.html...but who cares..let it be
         
             ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
                 db.serialize(function () {
                     db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+teacher_name+"','"+teacher_initials+"')");
                 })
             });
+
+            //now probably this also....
+
+            ipcRenderer.on('Supervisor:Store',(event,Supervisor_name,Supervisor_initials,Supervisor_position) => {
+                db.serialize(function () {
+                    console.log(Supervisor_name);
+                    console.log(Supervisor_initials);
+                    console.log(Supervisor_position);  
+                    db.run("INSERT INTO Supervisor(`Name`,`Initials`,`Position`) VALUES ( '"+Supervisor_name+"','"+Supervisor_initials+"','"+Supervisor_position+"')");
+                })
+            });
+
+            //this piece of shit also doesn't run ever
 
             ipcRenderer.on('Subject:Store',(event,Subject_name) => {
                 db.serialize(function () {
@@ -430,16 +453,15 @@
                 });
             }
 
-            ipcRenderer.on('Routine:Create', (event, Routine_name) => {
-                Routine_name = Routine_name;
+            ipcRenderer.on('Routine:Create', (event, routine_name, batch_yr, prog_full, prog_acr, year_rot, yr_part) => {
+                Routine_name = routine_name;
 
                 // console.log(Routine_name);
 
                 dropDown();
 
                 db.serialize(function () {
-                    db.run("CREATE TABLE " + Routine_name + "(`Table_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`	TEXT NOT NULL,`Period`	INTEGER NOT NULL,`Teacher`	TEXT NOT NULL,`Subject`	TEXT NOT NULL)");
-
+                    db.run("CREATE TABLE " + Routine_name + "(`Table_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`	TEXT,`Period`	INTEGER NOT NULL,`Teacher`	TEXT NOT NULL,`Subject`	TEXT NOT NULL,`Batch` INTEGER,`Program_full`  TEXT,`Program_acronym`   TEXT,`Year`  INTEGER,`Part`  INTEGER,`Effective_from` TEXT,`Time`  TEXT)");
                 });
 
 
@@ -448,7 +470,11 @@
                     db.serialize(function () {
                         let sqlCommandTableDelete = "DROP TABLE " + Routine_name;
                         db.run(sqlCommandTableDelete);
-                        db.run("CREATE TABLE " + Routine_name + "(`Table_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`	TEXT NOT NULL,`Period`	INTEGER NOT NULL,`Teacher`	TEXT NOT NULL,`Subject`	TEXT NOT NULL)");
+                        // db.run("CREATE TABLE " + Routine_name + "(`Table_id`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`    TEXT NOT NULL,`Period`  INTEGER NOT NULL,`Teacher`  TEXT NOT NULL,`Subject` TEXT NOT NULL,`Batch` INTEGER NOT NULL,`Program_full`  TEXT NOT NULL,`Program_acronym`   TEXT NOT NULL,`Year`  INTEGER NOT NULL,`Part`  INTEGER NOT NULL,`Effective_from` TEXT NOT NULL,`Time`  TEXT NOT NULL)");
+
+                        db.run("CREATE TABLE " + Routine_name + "(`Table_id`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`    TEXT,`Period`  INTEGER NOT NULL,`Teacher`  TEXT NOT NULL,`Subject` TEXT NOT NULL,`Batch` INTEGER,`Program_full`  TEXT,`Program_acronym`   TEXT,`Year`  INTEGER,`Part`  INTEGER,`Effective_from` TEXT,`Time`  TEXT)");
+
+                        
 
                         let teacherList_final = document.getElementsByClassName("select_teacher");
                         let teacherListArray_final = [].slice.call(teacherList_final);
@@ -472,9 +498,12 @@
 
                         for(let i=1;i<=6;i++){ 
                             for(let j=1; j<=2; j++){
-                                db.run("INSERT INTO " + Routine_name + "(`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')");   
+                                // db.run("INSERT INTO " + Routine_name + "(`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')");   
+                                db.run("INSERT INTO " + Routine_name + "(`Batch`,`Program_full`,`Program_acronym`,`Year`,`Part`,`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+ batch_yr+"','"+prog_full+"','"+prog_acr+"','"+year_rot+"','"+yr_part+"','"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')");   
                             }
                         }
+
+                        // db.run("INSERT INTO " + Routine_name + "(`Batch`,`Program_full`,`Program_acronym`,`Year`,`Part`) VALUES ( '"+ batch_yr+"','"+prog_full+"','"+prog_acr+"','"+year_rot+"','"+yr_part+"') ");
 
                     });
                 }
@@ -514,8 +543,8 @@
             // });
 
 
-            ipcRenderer.on('Routine:append', (event, Routine_name) => {
-                Routine_name = Routine_name;
+            ipcRenderer.on('Routine:append', (event, routine_name) => {
+                Routine_name = routine_name;
 
                 // console.log(Routine_name);
                 
@@ -526,7 +555,10 @@
                     db.serialize(function () {
                         let sqlCommandTableDelete = "DROP TABLE " + Routine_name;
                         db.run(sqlCommandTableDelete);
-                        db.run("CREATE TABLE " + Routine_name + "(`Table_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`	TEXT NOT NULL,`Period`	INTEGER NOT NULL,`Teacher`	TEXT NOT NULL,`Subject`	TEXT NOT NULL)");
+                        // db.run("CREATE TABLE " + Routine_name + "(`Table_id`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`    TEXT NOT NULL,`Period`  INTEGER NOT NULL,`Teacher`  TEXT NOT NULL,`Subject` TEXT NOT NULL,`Batch` INTEGER NOT NULL,`Program_full`  TEXT NOT NULL,`Program_acronym`   TEXT NOT NULL,`Year`  INTEGER NOT NULL,`Part`  INTEGER NOT NULL,`Effective_from` TEXT NOT NULL,`Time`  TEXT NOT NULL)");
+
+                        db.run("CREATE TABLE " + Routine_name + "(`Table_id`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE ,`Day`    TEXT,`Period`  INTEGER NOT NULL,`Teacher`  TEXT NOT NULL,`Subject` TEXT NOT NULL,`Batch` INTEGER,`Program_full`  TEXT,`Program_acronym`   TEXT,`Year`  INTEGER,`Part`  INTEGER,`Effective_from` TEXT,`Time`  TEXT)");
+                        
                         let teacherList_final = document.getElementsByClassName("select_teacher");
                         let teacherListArray_final = [].slice.call(teacherList_final);
                         let routine_db_teacher = [];

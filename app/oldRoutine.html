@@ -21,7 +21,7 @@
         </table>
         
       </div>
-      <button class="waves-effect waves-light btn" type="reset">Cancel</button>
+      <button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button>
       <button class="waves-effect waves-light btn" type="submit">Append changes to Routine</button>
     </form>
   </div>
@@ -52,7 +52,7 @@
           var i=0;
 
           rows.forEach((row) => {
-              if(row.name !== "Subject" && row.name !== "Teacher" && row.name !== "sqlite_sequence"){
+              if(row.name !== "Subject" && row.name !== "Teacher" && row.name !== "sqlite_sequence" && row.name != "Supervisor"){
                 const option = document.createElement('option');
                 const optionText = document.createTextNode(row.name);
                 option.appendChild(optionText);
@@ -72,6 +72,10 @@
       e.preventDefault();
       const item = document.querySelector('#table_dropdown').value;
       ipcRenderer.send('Routine:old', item);
+    }
+
+    document.getElementById("cancelButton").onclick = function(e){
+    ipcRenderer.send('closeWindow');
     }
 
   </script>

@@ -32,6 +32,8 @@
    </div>
     <form id="form_element"></form>
     <button class="submitChanges" id="submitChanges">SUBMIT_CHANGES</button>
+    <!-- <button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button> -->
+
 
 
     <script>
@@ -135,10 +137,15 @@
         });
 
         // console.log("finish");
+            // setTimeout(function() {ipcRenderer.send('closeWindow');}, 1000);
+        ipcRenderer.send('hideWindow');
+
         
         }
 
-       
+      // document.getElementById("cancelButton").onclick = function(e){
+      //   ipcRenderer.send('closeWindow');
+      // }
     </script>
 </body>
 </html>

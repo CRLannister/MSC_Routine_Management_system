@@ -78,8 +78,14 @@
     // document.getElementById("heading").appendChild(el_3_6);
 
     let el_3_6_1 = document.createElement("h4");
-    el_3_6_1.innerHTML = "";
+    el_3_6_1.id = "course_div_id";
     document.getElementById("heading").appendChild(el_3_6_1);
+
+    let el_3_6_2 = document.createElement("u");
+    el_3_6_2.id = "course_full_name";
+    el_3_6_2.innerHTML = "";
+    document.getElementById("course_div_id").appendChild(el_3_6_2);
+
 
     // let el_3_7 = document.createElement("br");
     // document.getElementById("heading").appendChild(el_3_7);
@@ -95,12 +101,42 @@
 
 
     let el_3_8_2 = document.createElement("b");
+    el_3_8_2.id = "batch_id";
     el_3_8_2.innerHTML = "OKAy";
     document.getElementById("course_type").appendChild(el_3_8_2);
 
     let el_3_9 = document.createElement("div");
     el_3_9.id = "level_bef_table";
     document.getElementById("heading").appendChild(el_3_9);
+
+    let el_3_9_1 = document.createElement("span");
+    el_3_9_1.id = "level_id";
+    el_3_9_1.style.display = "inline-block";
+    el_3_9_1.style.width = "20%";
+    el_3_9_1.innerHTML = "Level: Masters "
+    document.getElementById("level_bef_table").appendChild(el_3_9_1);
+
+    let el_3_9_2 = document.createElement("span");
+    el_3_9_2.id = "Program_id";
+    el_3_9_2.style.display = "inline-block";        
+    el_3_9_2.style.width = "20%";
+    el_3_9_2.innerHTML = "Program: "
+    document.getElementById("level_bef_table").appendChild(el_3_9_2);
+
+    let el_3_9_3 = document.createElement("span");
+    el_3_9_3.id = "year_id";
+    el_3_9_3.style.display = "inline-block";
+    el_3_9_3.style.width = "20%";
+    el_3_9_3.innerHTML = "Year: "
+    document.getElementById("level_bef_table").appendChild(el_3_9_3);
+
+
+    let el_3_9_4 = document.createElement("span");
+    el_3_9_4.id = "part_id";
+    el_3_9_4.style.display = "inline-block";
+    el_3_9_4.style.width = "20%";
+    el_3_9_4.innerHTML = "Part: "
+    document.getElementById("level_bef_table").appendChild(el_3_9_4);
 
 
 
@@ -156,6 +192,11 @@
     let db_name = "dummydata.sqlite3";
     let db_Path = __dirname + "/" + db_name;
     let db = new sqlite3.Database(db_Path);
+    let Batch_yr = 0;
+    let Program_full_name = "C";
+    let Program_acronym_name = "R";
+    let Year_yr = 1999;
+    let Part_yr = 2;
 
 
     //when control comes from main window to this window...then control sent to main process for data 
@@ -167,52 +208,77 @@
 
     ipcRenderer.on('doc_name',(event, Routine_name) =>{
         table_name = Routine_name;
-        for(let i = 0; i< days.length; i++){
-            let sqlCommand = `SELECT Teacher Teacher, Subject Subject from "${table_name}" WHERE Day = "${days[i]}"`;
-            
-            // console.log(table_name);
+        // console.log(table_name);
+        db.serialize(function () {
 
-            //data for days column from this file...i.e hardcoded
-
-            let newRow = table.insertRow(i + 1);
-                let newCell = newRow.insertCell(0);
-                let newText = document.createTextNode(days[i]);
-                newCell.appendChild(newText);
-                let k = 0;
-
-            db.all(sqlCommand, [], (err, rows)=>{
+            let initial_sql_command = `SELECT Batch Batch, Program_full Program_full, Program_acronym Program_acronym, Year Year, Part Part from "${table_name}" WHERE Table_id = 1`;
+            db.get(initial_sql_command,(err, row) => {
                 if (err) {
-                    throw err;
+                    return console.error(err.message);
                 }
-                //inserting rows after rows...in the document from the routine table
+                Batch_yr = row.Batch;
+                Program_full_name = row.Program_full;
+                Program_acronym_name = row.Program_acronym;
+                Year_yr = row.Year;
+                Part_yr = row.Part;
+                console.log(Year_yr);
+                console.log(Part_yr);
 
-                rows.forEach((row)=>{
-                    k++;
-                    let newCell1 = newRow.insertCell(k);
-                    teacher_name = document.createElement("p")
-                    teacher_name.innerHTML = row.Teacher;
-                    subject_name = document.createElement("p");
-                    subject_name.innerHTML = row.Subject;
-                    // let newText1 = document.createTextNode(row.Teacher +'\n' + row.Subject);
-                    console.log(row.Teacher);
-                    console.log(row.Subject);
-                    // newCell1.appendChild(newText1);
-                    newCell1.appendChild(teacher_name);
-                    newCell1.appendChild(subject_name);
+                document.getElementById("course_full_name").innerHTML = Program_full_name;
+                document.getElementById("batch_id").innerHTML = Batch_yr;
+                document.getElementById("Program_id").innerHTML += Program_acronym_name ;
+                document.getElementById("year_id").innerHTML += Year_yr.toString() ;
+                document.getElementById("part_id").innerHTML += Part_yr.toString() ;
 
-                    //this code for html file of document for line feed character to show effect
+            });
 
-                    // document.body.style = "white-space: pre;"
+
+            for(let i = 0; i< days.length; i++){
+                let sqlCommand = `SELECT Teacher Teacher, Subject Subject from "${table_name}" WHERE Day = "${days[i]}"`;
+                
+                // console.log(table_name);
+
+                //data for days column from this file...i.e hardcoded
+
+                let newRow = table.insertRow(i + 1);
+                    let newCell = newRow.insertCell(0);
+                    let newText = document.createTextNode(days[i]);
+                    newCell.appendChild(newText);
+                    let k = 0;
+
+                db.all(sqlCommand, [], (err, rows)=>{
+                    if (err) {
+                        throw err;
+                    }
+                    //inserting rows after rows...in the document from the routine table
+
+                    rows.forEach((row)=>{
+                        k++;
+                        let newCell1 = newRow.insertCell(k);
+                        teacher_name = document.createElement("p")
+                        teacher_name.innerHTML = row.Teacher;
+                        subject_name = document.createElement("p");
+                        subject_name.innerHTML = row.Subject;
+                        // let newText1 = document.createTextNode(row.Teacher +'\n' + row.Subject);
+                        console.log(row.Teacher);
+                        console.log(row.Subject);
+                        // newCell1.appendChild(newText1);
+                        newCell1.appendChild(teacher_name);
+                        newCell1.appendChild(subject_name);
+
+                        //this code for html file of document for line feed character to show effect
+
+                        // document.body.style = "white-space: pre;"
+                    })
                 })
-            })
-        }
+            }
 
-    
-        //ignoring this 2 lines as create element
+        
+            //ignoring this 2 lines as create element
 
-        // document.write('</table>');
-        // document.write('</div>');
-
+            // document.write('</table>');
+            // document.write('</div>');
+        });
             
     });
 
@@ -242,13 +308,17 @@
         document.body.removeChild(fileDownload);
     }
 
-
+    document.getElementById("cancelButton").onclick = function(e){
+        ipcRenderer.send('closeWindow');
+    }
 </script>
 
 
 
-<button id="btn-export" onclick="exportHTML(table_name);">Export to
-    word doc</button>
+<button id="btn-export" onclick="exportHTML(table_name);">Export to word doc</button>
+
+<button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button>
+
 
  
 

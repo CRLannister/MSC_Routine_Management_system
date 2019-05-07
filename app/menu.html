@@ -29,6 +29,10 @@
     <button type="button" id="editCourse">Edit Course</button></br>
     <button type="button" id="addTeacher">Add teacher</button></br>
     <button type="button" id="addCourse">Add Course</button></br>
+    <button type="button" id="addSupervisor">Add Supervisor</button></br>
+    <button type="button" id="editSupervisor">Edit Supervisor</button></br>
+
+
 
 
     <!--scripts for each buttons.-->
@@ -69,6 +73,13 @@
                 ipcRenderer.send('buttonClicked', 'addCourse');
                 console.log("from menu5");
             }
+            document.getElementById('addSupervisor').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'addSupervisor');
+                console.log("from menu5");
+            }
+            document.getElementById('editSupervisor').onclick = function(e){
+                ipcRenderer.send('buttonClicked', 'editSupervisor');
+            }
 
             ipcRenderer.on('Teacher:Store',(event,teacher_name,teacher_initials) => {
                 db.serialize(function () {
@@ -85,6 +96,14 @@
                 })
             });
 
+            ipcRenderer.on('Supervisor:Store',(event,Supervisor_name,Supervisor_initials,Supervisor_position) => {
+                db.serialize(function () {
+                    console.log(Supervisor_name);
+                    console.log(Supervisor_initials);
+                    console.log(Supervisor_position);  
+                    db.run("INSERT INTO Supervisor(`Name`,`Initials`,`Position`) VALUES ( '"+Supervisor_name+"','"+Supervisor_initials+"','"+Supervisor_position+"')");
+                })
+            });
             
         </script>
 

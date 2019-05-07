@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Edit Teacher</title>
+  <title>Edit Supervisor</title>
   <style>
       .edit{
           background-color: dodgerblue;
@@ -29,30 +29,29 @@
     <div>
     <p class="heads">NAME</p>
     <p class="heads">INITIALS</p>
+    <p class="heads">POSITION</p>
     </div>
     <form id = "form_element">
     </form>
     <button class="submitChanges" id="submitChanges">SUBMIT_CHANGES</button>
-    <!-- button tag used in logic algorithm -->
-    <!-- <button class="waves-effect waves-light btn" type="reset" id="cancelButton">Cancel</button> -->
 
 
     <script>
         var  i = 0;
         const electron = require('electron');
         const {ipcRenderer} = electron;
-        var sqlite3 = require('sqlite3').verbose();
-        var db_name = "dummydata.sqlite3";
-        var db_Path = __dirname + "/"+ db_name;
-        var db = new sqlite3.Database(db_Path);
+        let sqlite3 = require('sqlite3').verbose();
+        let db_name = "dummydata.sqlite3";
+        let db_Path = __dirname + "/"+ db_name;
+        let db = new sqlite3.Database(db_Path);
 
         function buttonFunction(){
 
-            let sqlCommandTeacher = "SELECT * FROM Teacher";
+            let sqlCommandSupervisor = "SELECT * FROM Supervisor";
             let form_element = document.getElementById('form_element');
             
             db.serialize(function (){ 
-                db.all(sqlCommandTeacher, [], (err, rows) => {
+                db.all(sqlCommandSupervisor, [], (err, rows) => {
                     if (err) {
                         throw err;
                     }
@@ -61,23 +60,29 @@
 
                         const div_element = document.createElement('div');
 
-                        var input1 = document.createElement("input");
+                        let input1 = document.createElement("input");
                         input1.type = "text";
-                        input1.className = "TeacherName";
+                        input1.className = "SupervisorName";
                         input1.value = row.Name;
                         div_element.appendChild(input1); 
 
-                        var input2 = document.createElement("input");
+                        let input2 = document.createElement("input");
                         input2.type = "text";
                         input2.className = "InitialsName";
                         input2.value = row.Initials;
                         div_element.appendChild(input2); 
 
-                        var delete_btn = document.createElement("button");
+                        let input3 = document.createElement("input");
+                        input3.type = "text";
+                        input3.className = "PositionName";
+                        input3.value = row.Position;
+                        div_element.appendChild(input3); 
+
+                        let delete_btn = document.createElement("button");
                         delete_btn.className = "delete";
                         delete_btn.id = "deleteButton" + String(i);
 
-                        var d = document.createTextNode("DELETE");
+                        let d = document.createTextNode("DELETE");
                         delete_btn.appendChild(d);
 
                         div_element.appendChild(delete_btn); 
@@ -97,13 +102,13 @@
           
             // console.log(buttonListArray);
             
-            var buttons = document.getElementsByTagName("button");
-            var buttonsCount = buttons.length - 1 ; //for last button     
+            let buttons = document.getElementsByTagName("button");
+            let buttonsCount = buttons.length - 1 ; //for last button     
           
             // console.log(buttonsCount);
             // console.log(this.id);
            
-            for (var j = 0; j < buttonsCount; j += 1) (function(j){
+            for (let j = 0; j < buttonsCount; j += 1) (function(j){
                 
                 // console.log(j);
                 //handle the event and add changes in database ...
@@ -113,7 +118,7 @@
                     // console.log(j);
                     // console.log(document.getElementById("deleteButton" + j));
 
-                    var parentID = document.getElementById("deleteButton" + j).parentNode;
+                    let parentID = document.getElementById("deleteButton" + j).parentNode;
                     
                     // console.log(parentID);
 
@@ -126,39 +131,55 @@
         }       
 
         document.getElementById("submitChanges").onclick = function(e){
-            let sqlCommandTeacherDelete = "DROP TABLE Teacher";
+            let sqlCommandSupervisorDelete = "DROP TABLE Supervisor";
             
             db.serialize(function () {
-                db.run(sqlCommandTeacherDelete);
-                db.run("CREATE TABLE Teacher(`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL,`Initials`	TEXT NOT NULL UNIQUE)");
+                db.run(sqlCommandSupervisorDelete);
+                db.run("CREATE TABLE Supervisor(`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,`Name`	TEXT NOT NULL,`Initials`	TEXT NOT NULL UNIQUE,`Position`  TEXT NOT NULL )");
                 
-                var teacherList_final = document.getElementsByClassName("TeacherName");
-                let teacherListArray_final = [].slice.call(teacherList_final);
-                var db_teacher = [];
+                let SupervisorList_final = document.getElementsByClassName("SupervisorName");
+                let SupervisorListArray_final = [].slice.call(SupervisorList_final);
+                let db_Supervisor = [];
 
                 // console.log(teacherListArray_final);
 
-                for (i = 0; i < teacherListArray_final.length; i++){
-                    db_teacher.push(teacherListArray_final[i].value);
+                for (i = 0; i < SupervisorListArray_final.length; i++){
+                    console.log(SupervisorListArray_final[i].value);
+                    db_Supervisor.push(SupervisorListArray_final[i].value);
                 }
 
                 // console.log(db_teacher);
 
-                var InitialList_final = document.getElementsByClassName("InitialsName");
+                let InitialList_final = document.getElementsByClassName("InitialsName");
                 let InitialListArray_final = [].slice.call(InitialList_final);
-                var db_Initial = [];
+                let db_Initial = [];
 
                 for (i = 0; i < InitialListArray_final.length; i++){
+                    console.log(InitialListArray_final[i].value);
                     db_Initial.push(InitialListArray_final[i].value);
+                }
+
+                let PositionList_final = document.getElementsByClassName("PositionName");
+                let PositionListArray_final = [].slice.call(PositionList_final);
+                let db_Position = [];
+
+                for (i = 0; i < PositionListArray_final.length; i++){
+                    console.log(PositionListArray_final[i].value);
+                    db_Position.push(PositionListArray_final[i].value);
                 }
 
                 // console.log(db_Initial);
 
-                for(var j=0; j< db_teacher.length; j++){
-                    db.run("INSERT INTO Teacher(`Name`,`Initials`) VALUES ( '"+db_teacher[j]+"','"+db_Initial[j]+"')"); 
+                for(let j=0; j< db_Supervisor.length; j++){
+                    db.run("INSERT INTO Supervisor(`Name`,`Initials`,`Position`) VALUES ( '"+db_Supervisor[j]+"','"+db_Initial[j]+"','"+db_Position[j]+"')"); 
                 }
 
+
+                
+
+
             });
+
             // setTimeout(function() {ipcRenderer.send('closeWindow');}, 1000);
             ipcRenderer.send('hideWindow');
 
@@ -166,9 +187,7 @@
 
             // console.log("finish");
         }
-        // document.getElementById("cancelButton").onclick = function(e){
-        //     ipcRenderer.send('closeWindow');
-        // }
+
     </script>
 </body>
 </html>
