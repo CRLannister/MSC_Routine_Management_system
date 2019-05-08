@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <title>MSC_Routine_Generator</title>
+      <title id="title">MSC_Routine_Generator</title>
       <link rel="stylesheet" href="index.css">
     </head>
     <body>
@@ -455,6 +455,7 @@
 
             ipcRenderer.on('Routine:Create', (event, routine_name, batch_yr, prog_full, prog_acr, year_rot, yr_part) => {
                 Routine_name = routine_name;
+                document.getElementById("title").innerHTML = Routine_name;
 
                 // console.log(Routine_name);
 
@@ -496,10 +497,12 @@
 
                         // console.log(routine_db_teacher);
 
+                        date_val = document.getElementById("select_date").value;
+
                         for(let i=1;i<=6;i++){ 
                             for(let j=1; j<=2; j++){
                                 // db.run("INSERT INTO " + Routine_name + "(`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')");   
-                                db.run("INSERT INTO " + Routine_name + "(`Batch`,`Program_full`,`Program_acronym`,`Year`,`Part`,`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+ batch_yr+"','"+prog_full+"','"+prog_acr+"','"+year_rot+"','"+yr_part+"','"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')");   
+                                db.run("INSERT INTO " + Routine_name + "(`Batch`,`Program_full`,`Program_acronym`,`Year`,`Part`,`Day`,`Period`,`Teacher`,`Subject`,`Effective_from`) VALUES ( '"+ batch_yr+"','"+prog_full+"','"+prog_acr+"','"+year_rot+"','"+yr_part+"','"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"','" + date_val + "')"); 
                             }
                         }
 
@@ -545,16 +548,19 @@
 
             ipcRenderer.on('Routine:append', (event, routine_name) => {
                 Routine_name = routine_name;
+                document.getElementById("title").innerHTML = Routine_name;
+
 
                 let batch_yr_val = 5;
                 let prog_full_val = "v";
                 let prog_acr_val = "r";
                 let year_rot_val = 6;
                 let yr_part_val = 3;
+                let date_val = "2"
 
                 db.serialize(function () {
 
-                    let initial_sql_command = `SELECT Batch Batch, Program_full Program_full, Program_acronym Program_acronym, Year Year, Part Part from "${Routine_name}" WHERE Table_id = 1`;
+                    let initial_sql_command = `SELECT Batch Batch, Program_full Program_full, Program_acronym Program_acronym, Year Year, Part Part, Effective_from Effective_from from "${Routine_name}" WHERE Table_id = 1`;
                     db.get(initial_sql_command,(err, row) => {
                         if (err) {
                             return console.error(err.message);
@@ -564,6 +570,8 @@
                         prog_acr_val = row.Program_acronym;
                         year_rot_val = row.Year;
                         yr_part_val = row.Part;
+                        date_val = row.Effective_from;
+                        document.getElementById("select_date").value = date_val;
                         console.log(year_rot_val);
                         console.log(yr_part_val);
 
@@ -602,12 +610,13 @@
 
 
                         // console.log(routine_db_teacher);
+                        date_val = document.getElementById("select_date").value;
 
                         for(let i=1;i<=6;i++){ 
                             for(let j=1; j<=2; j++){
                                 // db.run("INSERT INTO " + Routine_name + "(`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')"); 
 
-                                db.run("INSERT INTO " + Routine_name + "(`Batch`,`Program_full`,`Program_acronym`,`Year`,`Part`,`Day`,`Period`,`Teacher`,`Subject`) VALUES ( '"+ batch_yr_val+"','"+prog_full_val+"','"+prog_acr_val+"','"+year_rot_val+"','"+yr_part_val+"','"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"')"); 
+                                db.run("INSERT INTO " + Routine_name + "(`Batch`,`Program_full`,`Program_acronym`,`Year`,`Part`,`Day`,`Period`,`Teacher`,`Subject`,`Effective_from`) VALUES ( '"+ batch_yr_val+"','"+prog_full_val+"','"+prog_acr_val+"','"+year_rot_val+"','"+yr_part_val+"','"+days[i-1]+"','"+ j.toString() + "','" + routine_db_teacher[(i-1)*2+j-1] + "','"+ routine_db_subject[(i-1)*2+j-1] +"','" + date_val + "')"); 
                             }
                         }
                                         
