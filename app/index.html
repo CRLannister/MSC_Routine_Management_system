@@ -59,14 +59,22 @@
                     </select>
                 </div> -->
 
-                <div class="effective_date">Effective from
+                <!-- <div class="effective_date">Effective from
                     <input type="date" id="select_date">
                 </div>
 
+ -->
+
+			 <form>
+			      <div>
+			        <label>Effective From</label>
+			        <input type="text" id="eff_from" autofocus placeholder="2076-1-1">
+			    </div>
+			</form>
                 </b>
             </div>
 
-            <div class="second_info">
+            <!-- <div class="second_info">
                 <b>
                 <div class="time">Time
                     <input type="number" id="select_firsttime" min="1" max="12" value=00>
@@ -76,25 +84,25 @@
                         <option>AM</option>
                         <option>PM</option>
                     </select> 
-                </div>
+                </div> -->
           
-                <div class="_interval">Interval of each period
-                    <!-- <select id="select_interval" onchange="func1()">
+               <!--  <div class="_interval">Interval of each period
+                    <select id="select_interval" onchange="func1()">
                         <option >30</option>
                         <option >45</option>
                         <option value=50>50</option>
-                    </select> -->
+                    </select>
                     <input type="number" id="select_interval" 
                    min="10" max="60" value=45>
                     mins
                     <button class="btn_settime" onclick="myFunction_settime()">Set Time</button>
-                </div>
+                </div> -->
 
-                <div class="_periods">No.of periods
+                <!-- <div class="_periods">No.of periods
                     <select id="select_periods">
                         <option>4</option>
                     </select>
-                </div>
+                </div> -->
 
                 </b>
             </div>
@@ -117,8 +125,8 @@
             // let program=document.getElementById("select_program").value;
             // let year=document.getElementById("select_year").value;
             // let part=document.getElementById("select_part").value;
-            let e=document.getElementById("select_periods");
-            let date=document.getElementById("select_date").value;
+            // let e=document.getElementById("select_periods");
+            // let date=document.getElementById("select_date").value;
             let isfirst=0;
             let first=0;
             let frst=0;
@@ -208,54 +216,54 @@
                 
             document.write('</table>');
            
-            function myFunction_settime(){
-                let first_time=document.getElementById("select_firsttime").value;
-                let second_time=document.getElementById("select_secondtime").value;
-                let interval=document.getElementById("select_interval").value;
-                let time_period=document.getElementById("select_timeperiod").value;
-                if(interval==NaN){
-                    interval=0;
-                }
+            // function myFunction_settime(){
+            //     let first_time=document.getElementById("select_firsttime").value;
+            //     let second_time=document.getElementById("select_secondtime").value;
+            //     let interval=document.getElementById("select_interval").value;
+            //     let time_period=document.getElementById("select_timeperiod").value;
+            //     if(interval==NaN){
+            //         interval=0;
+            //     }
 
-                if(second_time<10){
-                    second_time="0"+second_time;
-                }
+            //     if(second_time<10){
+            //         second_time="0"+second_time;
+            //     }
 
-                for(let i=1;i<=4;i++){
-                    let new_time=parseInt(second_time)+parseInt(interval);
+            //     for(let i=1;i<=4;i++){
+            //         let new_time=parseInt(second_time)+parseInt(interval);
 
-                    if(new_time>59){
-                        let subb=new_time-60;
-                        if(first_time<12){
-                            storez=first_time;
-                            first_time++;
-                        }
+            //         if(new_time>59){
+            //             let subb=new_time-60;
+            //             if(first_time<12){
+            //                 storez=first_time;
+            //                 first_time++;
+            //             }
 
-                        else{
-                            storez=first_time;
-                            first_time=1;
-                        }
+            //             else{
+            //                 storez=first_time;
+            //                 first_time=1;
+            //             }
 
-                        if(subb<10 && subb>=0){
-                            subb="0"+subb;
-                        }
+            //             if(subb<10 && subb>=0){
+            //                 subb="0"+subb;
+            //             }
 
-                        document.getElementById("demo"+i).innerHTML = storez+":"+second_time+"-"+first_time+":"+subb+" "+time_period;
-                        second_time=subb;
-                    }
+            //             document.getElementById("demo"+i).innerHTML = storez+":"+second_time+"-"+first_time+":"+subb+" "+time_period;
+            //             second_time=subb;
+            //         }
 
-                    else{
-                        document.getElementById("demo"+i).innerHTML = first_time+":"+second_time+"-"+first_time+":"+new_time+" "+time_period;
-                        second_time=new_time;
-                    }
-                }
-            }
+            //         else{
+            //             document.getElementById("demo"+i).innerHTML = first_time+":"+second_time+"-"+first_time+":"+new_time+" "+time_period;
+            //             second_time=new_time;
+            //         }
+            //     }
+            // }
 
 
 
             document.write('<button type="button" id="Add_Changes">SAVE</button>');
-            document.write('<label id="pdf-path"></label>');
-            document.write('<button type="button" id="print-pdf">EXPORT PDF</button>');
+            // document.write('<label id="pdf-path"></label>');
+            // document.write('<button type="button" id="print-pdf">EXPORT PDF</button>');
             document.write('<label id="Word-path"></label>');
             document.write('<button type="button" id="exportWord">EXPORT DOC</button>');
             document.write('<button type="button" id="Back">Previous</button>');
@@ -288,7 +296,7 @@
             });
 
             function dropDown (){
-                let sqlCommandTeacher = `SELECT DISTINCT Name Name FROM Teacher`;
+                let sqlCommandTeacher = `SELECT DISTINCT Initials Name FROM Teacher`;
                 let teacherList = document.getElementsByClassName('select_teacher');
                 let teacherListArray = [].slice.call(teacherList);
 
@@ -350,7 +358,7 @@
 
             function old_dropDown (table_name){
                 Routine_name = table_name;
-                let sqlCommandTeacher = `SELECT DISTINCT Name Name FROM Teacher`;
+                let sqlCommandTeacher = `SELECT DISTINCT Initials Name FROM Teacher`;
                 let teacherList = document.getElementsByClassName('select_teacher');
                 let teacherListArray = [].slice.call(teacherList);
                 
@@ -481,6 +489,8 @@
                         let teacherListArray_final = [].slice.call(teacherList_final);
                         let routine_db_teacher = [];
 
+                        
+
                         // console.log(teacherListArray_final);
 
                         for (i = 0; i < teacherListArray_final.length; i++){
@@ -497,7 +507,7 @@
 
                         // console.log(routine_db_teacher);
 
-                        date_val = document.getElementById("select_date").value;
+                        date_val = document.getElementById("eff_from").value;
 
                         for(let i=1;i<=6;i++){ 
                             for(let j=1; j<=2; j++){
@@ -571,7 +581,7 @@
                         year_rot_val = row.Year;
                         yr_part_val = row.Part;
                         date_val = row.Effective_from;
-                        document.getElementById("select_date").value = date_val;
+                        // document.getElementById("select_date").value = date_val;
                         console.log(year_rot_val);
                         console.log(yr_part_val);
 
@@ -610,7 +620,7 @@
 
 
                         // console.log(routine_db_teacher);
-                        date_val = document.getElementById("select_date").value;
+                        date_val = document.getElementById("eff_from").value;
 
                         for(let i=1;i<=6;i++){ 
                             for(let j=1; j<=2; j++){
@@ -625,23 +635,23 @@
                 }
             });
 
-            const printPDFButton =document.getElementById('print-pdf');
+            // const printPDFButton =document.getElementById('print-pdf');
             const printWordButton =document.getElementById('exportWord');
 
 
-            printPDFButton.addEventListener('click',event => {
-                ipcRenderer.send('print-to-pdf',Routine_name);
+            // printPDFButton.addEventListener('click',event => {
+            //     ipcRenderer.send('print-to-pdf',Routine_name);
 
-            });
+            // });
 
             printWordButton.addEventListener('click',event => {
                 ipcRenderer.send('print-to-Word', Routine_name);
             });
 
-            ipcRenderer.on('wrote-pdf',(event,path) =>{
-                const message = `Wrote pdf to : ${path}`;
-                document.getElementById('pdf-path').innerHTML = message;
-            });
+            // ipcRenderer.on('wrote-pdf',(event,path) =>{
+            //     const message = `Wrote pdf to : ${path}`;
+            //     document.getElementById('pdf-path').innerHTML = message;
+            // });
 
             ipcRenderer.on('wrote-Word',(event,path) =>{
                 const message = `Wrote word to : ${path}`;

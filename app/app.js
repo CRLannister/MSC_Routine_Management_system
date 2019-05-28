@@ -183,27 +183,32 @@ ipcMain.on('closeWindow', function(e){
   addWindow.close();
 });
 
+ipcMain.on('return_menu', function(e){
+  mainWindow.loadURL('file://' + __dirname + '/menu.html');
+
+});
+
 ipcMain.on('hideWindow', function(e){
   addWindow.hide();
 });
 
-ipcMain.on('print-to-pdf', function(event, table_name){
-  table_name_ext = table_name + '.pdf'
-  const pdfPath = path.join(pdf_path, table_name_ext);
-  console.log(pdfPath);
-  const win = BrowserWindow.fromWebContents(event.sender);
+// ipcMain.on('print-to-pdf', function(event, table_name){
+//   table_name_ext = table_name + '.pdf'
+//   const pdfPath = path.join(pdf_path, table_name_ext);
+//   console.log(pdfPath);
+//   const win = BrowserWindow.fromWebContents(event.sender);
 
-  win.webContents.printToPDF({}, (error, data) => {
-    if (error) return console.log(error.message);
+//   win.webContents.printToPDF({}, (error, data) => {
+//     if (error) return console.log(error.message);
 
-    fs.writeFile(pdfPath, data, err => {
-      if (err) return console.log(err.message);
-      shell.openExternal('file://' + pdfPath);
-      event.sender.send('wrote-pdf', pdfPath);
-    })
+//     fs.writeFile(pdfPath, data, err => {
+//       if (err) return console.log(err.message);
+//       shell.openExternal('file://' + pdfPath);
+//       event.sender.send('wrote-pdf', pdfPath);
+//     })
     
-  })
-});
+//   })
+// });
 
 // Receiving communication from index.html for new window creation and passing table_name info to main process..ie..app.js
 
