@@ -7,9 +7,9 @@ Prashant Tandon 	073BCT528\
 Priya Jha 			073BCT530\
 Sudeep Bhandari 	073BCT545
 
-\Binaries for windows and packaged application for linux (debian and red hat)\
+Binaries for windows and packaged application for linux (debian and red hat)\
 can be found under releases.
-\
+
 
 
 # Build from source
